@@ -1,0 +1,34 @@
+# Apuntes sobre Git y GitHub
+
+                                                              PROMPT 1
+
+## 1. Configuración inicial de Git
+
+- **Configurar el nombre de usuario y correo electrónico:**
+  Es importante configurar el nombre y correo que se asociarán a los commits. Esto se hace con los comandos:
+  ```bash
+  git config --global user.name "Tu Nombre"
+  git config --global user.email "tu_correo@dominio.com"
+
+  ##Al ya tener lo de global hecho desde antes, no hace falta este paso, porque se utliza siempre el mismo mail y nombre
+
+
+
+# 2. Uso de HTTPS y SSH para GitHub
+
+## 1. Usar HTTPS
+El método de **HTTPS** es el más común y fácil de configurar. Sin embargo, requiere que ingreses tu **usuario y contraseña** cada vez que realices un `git push` o `git pull`. Si tienes habilitada la **autenticación de dos factores**, necesitarás usar un **token personal** en lugar de tu contraseña.
+
+## 2. Usar SSH
+El método de SSH es más seguro que HTTPS, ya que no requiere ingresar usuario y contraseña cada vez que haces `git push` o `git pull`. En su lugar, se usa un sistema de autenticación con **claves públicas** y **claves privadas**, lo que facilita el proceso sin necesidad de un token personal, incluso si tienes habilitada la autenticación de dos factores.
+
+##Resumen: conviene usar SSH, mas rapido y facil porque podes usar la misma clave que ya tenias desde proyectos anteriores
+
+
+                                                             PROMPT 2
+
+¿Qué son getopt y argparse?
+Ambos módulos sirven para manejar argumentos de línea de comandos en Python, pero tienen diferencias importantes
+## Mejor argparse en general para manejar todo, ya que necesita menos codigo.
+
+
