@@ -1,0 +1,41 @@
+1. Definición de Proceso
+
+    Programa: Conjunto de instrucciones guardadas en un archivo.
+
+    Proceso: Instancia de ejecución de un programa, con su propio espacio de memoria, registros, y atributos como PID, PPID, contador de programa, pila y archivos abiertos.
+
+2. Estados de un Proceso
+
+    Nuevo, Listo, Ejecutando, Bloqueado, Terminado.
+
+    Zombi: Proceso terminado, pero su estado no ha sido recogido por el padre.
+
+    Huérfano: Proceso cuyo padre ha terminado, pero sigue ejecutándose.
+
+3. Modelo de Procesos en UNIX/Linux
+
+    fork(): Crea un proceso hijo, duplicando el proceso padre.
+
+    exec(): Reemplaza el código de un proceso con otro programa.
+
+4. Herramientas de Supervisión
+
+    ps: Muestra procesos con detalles.
+
+    top: Muestra uso de recursos de los procesos en tiempo real.
+
+    pstree: Muestra la jerarquía de procesos.
+
+5. Supervisión con Python
+
+    os.fork(): Crea un proceso hijo.
+
+    os.wait(): El padre espera que el hijo termine.
+
+Dudas Comunes
+
+    PID: Es necesario para identificar y gestionar procesos.
+
+    Stack: Almacena información de ejecución, como direcciones de retorno y parámetros de funciones.
+
+    Proceso zombi: Queda cuando el padre no recoge su estado después de que el hijo termina.
