@@ -1,0 +1,87 @@
+
+Problemas que se evidencian en el ejercicio1 de practica:
+
+    Condición de carrera: el hijo podría intentar leer el archivo antes de que el padre termine de escribirlo.
+
+    No hay sincronización: padre e hijo escriben en el archivo sin coordinarse, causando resultados impredecibles.
+
+    Posible pérdida o mezcla de datos: si ambos escriben al mismo tiempo sin mecanismos de bloqueo, el contenido final del archivo puede ser inconsistente.
+
+===============================================================================================================================================================================
+
+1. ¿QUÉ ES UN PIPE?
+-------------------------
+Un pipe es un mecanismo de comunicación entre procesos (IPC).
+Permite que un proceso escriba datos y otro los lea.
+
+Tipos de pipes:
+- Anónimos: solo entre procesos relacionados (padre-hijo)
+- Nombrados (FIFOs): visibles en el sistema de archivos y pueden usarse entre procesos no relacionados
+
+2. FUNCIONAMIENTO
+-------------------------
+Un pipe es unidireccional: un extremo escribe y el otro lee.
+
+En Python:
+    os.pipe() → devuelve dos descriptores: lectura y escritura
+
+3. CICLO DE VIDA DE UN PIPE
+-------------------------
+1. Crear pipe con os.pipe()
+2. Crear proceso hijo con os.fork()
+3. Cerrar los extremos no utilizados
+4. Comunicación (escribir/leer)
+5. Cerrar todos los descriptores
+6. El sistema limpia los recursos
+
+4. EJEMPLO BÁSICO EN PYTHON
+-------------------------
+
+import os
+
+r, w = os.pipe()
+pid = os.fork()
+
+if pid > 0:
+    # Proceso padre
+    os.close(r)
+    os.write(w, b"Hola hijo")
+    os.close(w)
+else:
+    # Proceso hijo
+    os.close(w)
+    mensaje = os.read(r, 32).decode()
+    print("Hijo recibió:", mensaje)
+    os.close(r)
+
+5. COMUNICACIÓN BIDIRECCIONAL
+-------------------------
+Se necesitan 2 pipes:
+
+    r1, w1 = os.pipe()  # Padre → Hijo
+    r2, w2 = os.pipe()  # Hijo → Padre
+
+Cerrar extremos correctos en cada proceso.
+
+6. ERRORES COMUNES Y CÓMO EVITARLOS
+-------------------------
+| Problema            | Solución                         |
+|---------------------|----------------------------------|
+| Deadlock            | Cerrar extremos no usados        |
+| Lectura bloqueada   | Verificar si hay datos           |
+| Escritura sin lector| Cerrar extremos correctamente    |
+| Decodificación      | Usar decode(), int(), etc.       |
+
+7. CONVERSIÓN DE DATOS
+-------------------------
+- Leer bytes: os.read()
+- A string: .decode()
+- A entero: int()
+
+8. BUENAS PRÁCTICAS
+-------------------------
+- Documentar el código
+- Cerrar extremos no usados
+- Sincronizar procesos
+- Usar os.wait() para esperar al hijo
+
