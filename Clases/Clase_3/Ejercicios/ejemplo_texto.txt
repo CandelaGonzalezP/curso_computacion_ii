@@ -1,0 +1,4 @@
+Python facilita la programación.
+Los procesos pueden comunicarse con pipes.
+Este ejemplo ilustra eso claramente.
+Cada línea será contada por el hijo.

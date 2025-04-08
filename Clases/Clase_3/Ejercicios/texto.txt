@@ -1,0 +1,3 @@
+Hola mundo
+Este es un ejercicio de pipes
+Python es genial

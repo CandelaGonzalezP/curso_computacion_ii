@@ -1,0 +1,4 @@
+Este es un archivo de ejemplo.
+Contiene algunas líneas de texto.
+Para demostrar el contador de palabras.
+Usando pipes en Python.

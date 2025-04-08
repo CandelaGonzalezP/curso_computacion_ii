@@ -1,4 +1,4 @@
-#EJERCICIO 1
+#EJERCICIO CLASES
 
 import os
 import time
