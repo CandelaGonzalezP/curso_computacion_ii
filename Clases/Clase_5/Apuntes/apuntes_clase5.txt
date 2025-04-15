@@ -1,0 +1,19 @@
+Concepto de Queue
+- FIFO (First In, First Out).
+- Usada para la comunicación entre procesos en programación concurrente.
+- Los procesos productores colocan datos en la Queue, y los consumidores los sacan.
+
+Ciclo de vida de una Queue
+- Crear la Queue.
+- Los procesos productores añaden datos con `put()`.
+- Los consumidores leen los datos con `get()`.
+- Uso de `join()` para esperar a que los procesos terminen.
+
+Errores comunes y soluciones
+Deadlock: Espera infinita entre procesos. Solución: Uso de `timeout` en `get()`.
+Starvation: Un proceso no accede a los recursos. Solución: Balancear el acceso a la Queue.
+Race condition: Acceso simultáneo no protegido a un recurso. Solución: Usar Queue en lugar de variables globales.
+
+Comparación Queue vs Pipe
+- Queue: Comunicación bidireccional segura, FIFO, usa internamente sincronización.
+- Pipe: Comunicación unidireccional, puede necesitar mecanismos adicionales de sincronización.
