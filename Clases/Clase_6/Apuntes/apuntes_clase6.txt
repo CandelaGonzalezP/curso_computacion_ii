@@ -1,0 +1,34 @@
+Apuntes – Comunicación entre procesos con FIFOs (Python + Linux)
+
+- Concepto de FIFO:
+  - Permiten comunicación entre procesos independientes.
+  - Se identifican por un nombre en el sistema de archivos.
+  - A diferencia de los pipes anónimos, no requieren relación padre-hijo.
+
+- Comandos básicos:
+  - Crear FIFO: `os.mkfifo(ruta)` o desde terminal `mkfifo /ruta/del/fifo`
+
+- Acceso en Python:
+  - Escritura: abrir con `'w'`
+  - Lectura: abrir con `'r'`
+  - Bloqueo si no hay un proceso del otro lado (lector/escritor).
+
+- Sincronización y bloqueo:
+  - FIFO bloquea si no hay nadie del otro lado.
+  - Uso de `select.select()` para evitar bloqueos en lectura.
+  - Alternativa: usar hilos para permitir lectura y escritura simultánea.
+
+- Cursor y descriptores:
+  - Cada proceso tiene su propio descriptor y cursor.
+  - Dos procesos leyendo el mismo FIFO no comparten posición de lectura.
+
+- Manejo de errores:
+  - Comprobar si el FIFO existe antes de crearlo.
+  - Capturar excepciones con `try/except`.
+  - Verificar permisos y rutas absolutas.
+
+- Casos prácticos realizados:
+  - Chat entre procesos con salida controlada (‘salir’).
+  - Chat con mensajes JSON.
+  - Lectura no bloqueante con `select()`.
+  - Visualización de errores reales (archivos no encontrados, bloqueos).

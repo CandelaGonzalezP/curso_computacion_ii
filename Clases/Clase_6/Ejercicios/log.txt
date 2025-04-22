@@ -1,0 +1,5 @@
+INFO: Sistema iniciado
+ERROR: No se pudo conectar a la base de datos
+INFO: Usuario autenticado
+WARNING: Espacio en disco bajo
+ERROR: Fallo en el servidor de correo
