@@ -1,0 +1,48 @@
+SEÑALES 
+
+🧠 ¿QUÉ SON LAS SEÑALES?
+Las señales son un mecanismo de comunicación asíncrona entre procesos o entre el kernel y un proceso. Son eventos que notifican a un proceso que ocurrió una condición externa o interna, y pueden ser capturadas o manejadas por funciones específicas.
+
+📌 EJEMPLOS COMUNES DE SEÑALES:
+- SIGINT: Interrupción desde teclado (Ctrl+C)
+- SIGTERM: Solicitud de terminación
+- SIGKILL: Terminación forzada (no se puede capturar ni ignorar)
+- SIGUSR1 y SIGUSR2: Señales definidas por el usuario
+- SIGCHLD: Se envía a un padre cuando su hijo termina
+
+🔎 CLASIFICACIÓN:
+- **Síncronas**: Resultado directo de la ejecución del proceso (p. ej., SIGSEGV).
+- **Asíncronas**: Emitidas por otros procesos o por el sistema (p. ej., SIGINT).
+- **Tiempo real**: Desde SIGRTMIN a SIGRTMAX, permiten cola de señales y datos.
+
+🧩 FUNCIONES EN PYTHON:
+```python
+import signal
+
+def manejador(signum, frame):
+    print("Señal recibida:", signum)
+
+signal.signal(signal.SIGINT, manejador)
+
+####################################################################################
+
+    signal.signal(sig, handler): Asocia un manejador a una señal.
+
+    os.kill(pid, sig): Envía una señal a un proceso.
+
+    signal.getsignal(sig): Consulta el manejador actual de una señal.
+
+🚫 SEÑALES NO CAPTURABLES:
+
+    SIGKILL y SIGSTOP no pueden ser manejadas ni ignoradas por seguridad.
+
+🧵 SEÑALES Y MULTIHILOS: En Python, por limitaciones del GIL, solo el main thread puede manejar señales. Los threads secundarios no reciben señales directamente.
+
+🔄 USO PARA SINCRONIZACIÓN: Las señales permiten coordinar acciones entre procesos, por ejemplo, esperando una señal para continuar la ejecución.
+
+📚 COMPARACIÓN CON OTROS MECANISMOS IPC:
+
+    Las señales son más ligeras pero menos seguras que pipes, sockets o colas.
+
+    No permiten paso de datos complejos (excepto señales de tiempo real en C).
+
