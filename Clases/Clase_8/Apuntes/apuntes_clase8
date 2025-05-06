@@ -1,0 +1,51 @@
+1. Fundamentos de procesos y programación concurrente
+
+    Proceso vs Hilo: Un proceso es una instancia de un programa en ejecución, con su propia memoria y recursos. Un hilo es una unidad más ligera dentro de un proceso que comparte los mismos recursos. Los hilos son más rápidos de crear pero pueden generar conflictos al acceder a datos compartidos.
+
+    Multiprocessing en Python: El módulo multiprocessing permite ejecutar procesos en paralelo, lo que es útil para aprovechar múltiples núcleos de CPU. A diferencia de los hilos, los procesos en Python no comparten memoria por defecto, lo que evita problemas de sincronización comunes en los hilos.
+
+2. Creación y gestión de procesos con multiprocessing
+
+    Crear procesos: Se usan los objetos Process para crear y gestionar procesos. Los métodos importantes son:
+
+        start(): Inicia el proceso.
+
+        join(): Espera a que el proceso termine antes de continuar.
+
+        is_alive(): Verifica si el proceso está en ejecución.
+
+    PID y atributos: Cada proceso tiene un ID único (PID). Usar estos identificadores ayuda a gestionar y monitorear los procesos en ejecución.
+
+3. Comunicación entre procesos
+
+    Pipe: Es una forma de comunicación entre procesos, donde los datos fluyen en una dirección (unidireccional). Se usan para enviar pequeños bloques de información entre procesos.
+
+    Queue: Permite enviar datos entre procesos de forma segura y eficiente. Es más flexible que un Pipe y es recomendable para enviar múltiples elementos de datos entre procesos.
+
+    Diferencia entre Pipe y Queue: Queue es más robusta y segura en escenarios de múltiples procesos, mientras que Pipe es más simple y eficiente en casos de comunicación entre un par de procesos.
+
+4. Sincronización básica con Lock
+
+    Condiciones de carrera: Ocurren cuando varios procesos intentan modificar un dato compartido al mismo tiempo. Esto puede generar resultados impredecibles y errores.
+
+    Uso de Lock: El Lock se usa para garantizar que un solo proceso acceda a un recurso compartido en un momento determinado. Los procesos adquieren el Lock antes de modificar datos compartidos y lo liberan después.
+
+5. Uso de Pool para gestión de procesos
+
+    Pool: Permite manejar múltiples procesos de manera eficiente. Los métodos importantes son:
+
+        map(): Asigna tareas a los procesos del pool.
+
+        apply(): Ejecuta una función en un proceso del pool de forma síncrona.
+
+        map_async() y apply_async(): Versiones asíncronas de map() y apply(), respectivamente.
+
+    Ventaja de usar Pool: Simplifica la gestión de muchos procesos y facilita la distribución de tareas en paralelo.
+
+6. Memoria compartida con Value y Array
+
+    Value: Se utiliza para compartir un único valor entre procesos (como enteros o flotantes). Es útil cuando se necesita una variable compartida, pero sin la necesidad de estructurar muchos datos.
+
+    Array: Se usa para compartir una lista de valores entre procesos. Es ideal cuando se requiere manejar colecciones de datos (como listas o matrices).
+
+    Precauciones: Aunque Value y Array permiten compartir datos, no son seguras por sí solas en situaciones de concurrencia. Es recomendable usar Lock si varios procesos modifican esos datos.
