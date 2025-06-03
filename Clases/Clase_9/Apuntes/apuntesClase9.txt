@@ -1,0 +1,72 @@
+------------------APUNTES multiprocessing-----------------------
+
+Dominando la Concurrencia en Python con multiprocessing
+
+1. Introducción:
+- La concurrencia es clave en sistemas modernos multiproceso.
+- Problema clásico: condiciones de carrera.
+- Solución: exclusión mutua mediante primitivas como Lock, Semaphore, etc.
+
+2. Lock:
+- Garantiza que solo un proceso acceda a una sección crítica.
+- Métodos: acquire(), release(), o preferentemente con "with lock:".
+- Útil para proteger variables compartidas.
+- No reentrante: un proceso no puede adquirir dos veces el mismo Lock.
+
+3. RLock (Reentrant Lock):
+- Permite que el mismo proceso adquiera múltiples veces el lock.
+- Útil en funciones recursivas o métodos anidados con sincronización.
+- Mantiene contador de adquisiciones.
+- Evita deadlocks en llamadas anidadas.
+
+4. Semaphore:
+- Controla el acceso simultáneo a un recurso con capacidad N.
+- Cada acquire() reduce el contador, release() lo aumenta.
+- Ideal para pools de conexiones, buffers limitados, etc.
+- No verifica propiedad del recurso (cualquier proceso puede liberar).
+
+5. BoundedSemaphore:
+- Igual que Semaphore, pero lanza error si se hace release() de más.
+- Ayuda a detectar bugs en la lógica de sincronización.
+- Recomendado en sistemas críticos y pruebas.
+
+6. Condition:
+- Permite esperar a que se cumpla una condición específica en los datos.
+- Usa un Lock asociado.
+- Métodos clave: wait(), notify(), notify_all().
+- wait() debe usarse dentro de un while que verifique la condición.
+- Útil para productor-consumidor, lectores-escritores, barreras reutilizables.
+
+7. Event:
+- Una bandera booleana compartida entre procesos.
+- set() la activa, clear() la desactiva, wait() bloquea hasta que esté activa.
+- Sencilla y útil para coordinar señales de inicio/parada.
+
+8. Barrier:
+- Punto de encuentro para N procesos.
+- Todos deben llamar a wait() para continuar.
+- Se usa para sincronizar fases o inicializaciones colectivas.
+- Cuidado con excepciones BrokenBarrierError.
+
+9. Queue:
+- Cola FIFO segura entre procesos.
+- put() agrega, get() remueve.
+- Ideal para pasar tareas y resultados entre procesos.
+- JoinableQueue permite seguimiento con task_done() y join().
+
+10. Value:
+- Variable simple (int, float, bool) compartida entre procesos.
+- Usa ctypes para declarar el tipo.
+- No es atómica: requiere Lock si se modifica con operaciones como +=.
+
+11. Array:
+- Similar a Value, pero para múltiples elementos.
+- Todos del mismo tipo.
+- También requiere sincronización externa para acceso seguro.
+
+12. Buenas Prácticas:
+- Siempre usa Locks al modificar estructuras compartidas.
+- Prefiere "with lock:" para evitar olvidos de release().
+- Usa BoundedSemaphore para evitar errores lógicos silenciosos.
+- En espera condicional, siempre verifica la condición en un while.
+- Diseña pensando en la simplicidad y legibilidad de la sincronización.
