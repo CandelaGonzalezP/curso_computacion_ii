@@ -1,0 +1,6 @@
+Total de bloques: 60
+Bloques con alertas: 0
+Bloques corruptos: 0 -> []
+Promedio frecuencia: 116.03
+Promedio presión sistólica: 141.99
+Promedio oxígeno: 95.10
