@@ -1,20 +1,21 @@
-# Verificación de Integridad y Reporte
-
+# verificar_cadena.py
+# Tarea 3: Verificación de integridad y generación de reporte
 
 import json
 import hashlib
+
 
 def calcular_hash(prev_hash, datos, timestamp):
     bloque_str = f"{prev_hash}{json.dumps(datos, sort_keys=True)}{timestamp}"
     return hashlib.sha256(bloque_str.encode()).hexdigest()
 
-def verificar_cadena_y_generar_reporte(ruta_blockchain = "data/blockchain.json"):
-    with open(ruta_blockchain, "r") as f:
+
+def verificar_cadena_y_generar_reporte(ruta="output/blockchain.json"):
+    with open(ruta, "r") as f:
         cadena = json.load(f)
 
     bloques_corruptos = []
     alertas = 0
-
     suma_frec = 0
     suma_pres = 0
     suma_oxi = 0
@@ -42,8 +43,7 @@ def verificar_cadena_y_generar_reporte(ruta_blockchain = "data/blockchain.json")
     prom_pres = suma_pres / total_bloques
     prom_oxi = suma_oxi / total_bloques
 
-    # Generar reporte
-    with open("data/reporte.txt", "w") as f:
+    with open("reporte.txt", "w") as f:
         f.write(f"Total de bloques: {total_bloques}\n")
         f.write(f"Bloques con alertas: {alertas}\n")
         f.write(f"Bloques corruptos: {len(bloques_corruptos)} -> {bloques_corruptos}\n")
@@ -52,6 +52,7 @@ def verificar_cadena_y_generar_reporte(ruta_blockchain = "data/blockchain.json")
         f.write(f"Promedio oxígeno: {prom_oxi:.2f}\n")
 
     print("[✔] Verificación completa. Reporte generado como reporte.txt")
+
 
 if __name__ == "__main__":
     verificar_cadena_y_generar_reporte()

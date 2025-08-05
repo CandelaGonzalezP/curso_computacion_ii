@@ -1,0 +1,1562 @@
+[
+    {
+        "timestamp": "2025-07-19T18:30:02",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:02",
+                "media": 118.0,
+                "desv": 0.0
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:02",
+                "media": 130.0,
+                "desv": 0.0
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:02",
+                "media": 95.0,
+                "desv": 0.0
+            }
+        },
+        "alerta": false,
+        "prev_hash": "0",
+        "hash": "d6ab59f688ef78805d9290818c1e9c5e7070e825b4105bdde303f91a92a0d2e6"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:03",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:03",
+                "media": 145.5,
+                "desv": 27.5
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:03",
+                "media": 153.5,
+                "desv": 23.5
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:03",
+                "media": 94.5,
+                "desv": 0.5
+            }
+        },
+        "alerta": false,
+        "prev_hash": "d6ab59f688ef78805d9290818c1e9c5e7070e825b4105bdde303f91a92a0d2e6",
+        "hash": "aca7ceba9648c57ad45b6bd4ec52687da486d7355bc0c07aea31dbc5ed4fb1ad"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:04",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:04",
+                "media": 125.33333333333333,
+                "desv": 36.298148100909444
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:04",
+                "media": 139.33333333333334,
+                "desv": 27.740864362084245
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:04",
+                "media": 94.0,
+                "desv": 0.816496580927726
+            }
+        },
+        "alerta": false,
+        "prev_hash": "aca7ceba9648c57ad45b6bd4ec52687da486d7355bc0c07aea31dbc5ed4fb1ad",
+        "hash": "8c356506aaec786b5e3430e342776afbeb79f4d99bb7663b61471541db61575e"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:05",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:05",
+                "media": 134.5,
+                "desv": 35.21718330588067
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:05",
+                "media": 138.0,
+                "desv": 24.13503677229434
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:05",
+                "media": 93.5,
+                "desv": 1.118033988749895
+            }
+        },
+        "alerta": false,
+        "prev_hash": "8c356506aaec786b5e3430e342776afbeb79f4d99bb7663b61471541db61575e",
+        "hash": "5a8496c5bdc9e178c00c27a85a241df9e007ce9a978563a7a21cba0014018754"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:06",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:06",
+                "media": 137.4,
+                "desv": 32.028737096551275
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:06",
+                "media": 138.8,
+                "desv": 21.6462467878383
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:06",
+                "media": 94.4,
+                "desv": 2.0591260281974
+            }
+        },
+        "alerta": false,
+        "prev_hash": "5a8496c5bdc9e178c00c27a85a241df9e007ce9a978563a7a21cba0014018754",
+        "hash": "3d78e67cffa966cb914cb2c986e1e16acf1af0005e36c11f55e247c2ca29b0b6"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:07",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:07",
+                "media": 136.33333333333334,
+                "desv": 29.335227211589068
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:07",
+                "media": 137.16666666666666,
+                "desv": 20.094913673752263
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:07",
+                "media": 94.66666666666667,
+                "desv": 1.9720265943665387
+            }
+        },
+        "alerta": false,
+        "prev_hash": "3d78e67cffa966cb914cb2c986e1e16acf1af0005e36c11f55e247c2ca29b0b6",
+        "hash": "47d5a1309a725ea9aeb78ade639c21238fc94dcc311891d12d084abb9dc9882b"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:08",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:08",
+                "media": 138.57142857142858,
+                "desv": 27.706920965487218
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:08",
+                "media": 141.85714285714286,
+                "desv": 21.86601127273998
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:08",
+                "media": 95.28571428571429,
+                "desv": 2.3733211036908783
+            }
+        },
+        "alerta": false,
+        "prev_hash": "47d5a1309a725ea9aeb78ade639c21238fc94dcc311891d12d084abb9dc9882b",
+        "hash": "ccb9bdf58b2f28f715a3573aebf63c11b6a1fd1d39aa030ec5f45a8c032c322b"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:09",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:09",
+                "media": 143.0,
+                "desv": 28.442925306655784
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:09",
+                "media": 137.875,
+                "desv": 23.007811173599283
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:09",
+                "media": 95.5,
+                "desv": 2.29128784747792
+            }
+        },
+        "alerta": false,
+        "prev_hash": "ccb9bdf58b2f28f715a3573aebf63c11b6a1fd1d39aa030ec5f45a8c032c322b",
+        "hash": "fb2ac3c31091e9125169716e8f563fed978482ec4217354b34900e68e044d5db"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:10",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:10",
+                "media": 138.77777777777777,
+                "desv": 29.355210696939793
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:10",
+                "media": 138.88888888888889,
+                "desv": 21.88070913153331
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:10",
+                "media": 95.77777777777777,
+                "desv": 2.2986845406196887
+            }
+        },
+        "alerta": false,
+        "prev_hash": "fb2ac3c31091e9125169716e8f563fed978482ec4217354b34900e68e044d5db",
+        "hash": "d1562a34048e89ca49e105c7ec9960b4ee3e86fd73fc7cfd6dc2836c0c3aaf09"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:11",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:11",
+                "media": 134.6,
+                "desv": 30.539155194602223
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:11",
+                "media": 136.9,
+                "desv": 21.59837956884729
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:11",
+                "media": 96.2,
+                "desv": 2.5219040425836985
+            }
+        },
+        "alerta": false,
+        "prev_hash": "d1562a34048e89ca49e105c7ec9960b4ee3e86fd73fc7cfd6dc2836c0c3aaf09",
+        "hash": "1a5e069b45de7a9d6b4160e3ac36451759f2d792fac94b23f56c95e38ced460e"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:12",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:12",
+                "media": 128.72727272727272,
+                "desv": 34.53612314161641
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:12",
+                "media": 139.36363636363637,
+                "desv": 22.01764881871205
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:12",
+                "media": 95.81818181818181,
+                "desv": 2.690663379445226
+            }
+        },
+        "alerta": false,
+        "prev_hash": "1a5e069b45de7a9d6b4160e3ac36451759f2d792fac94b23f56c95e38ced460e",
+        "hash": "4e525c257d7fc4ae0c406c30fe3fd51edd619d61104b003361ef8bb64a519181"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:13",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:13",
+                "media": 128.66666666666666,
+                "desv": 33.066431450776314
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:13",
+                "media": 142.08333333333334,
+                "desv": 22.92908754302176
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:13",
+                "media": 96.08333333333333,
+                "desv": 2.722080495176846
+            }
+        },
+        "alerta": false,
+        "prev_hash": "4e525c257d7fc4ae0c406c30fe3fd51edd619d61104b003361ef8bb64a519181",
+        "hash": "100eab4a9856dbbb8212fb85db421d67e8f4bd5cb71280685bc54b9b98d52d96"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:14",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:14",
+                "media": 123.38461538461539,
+                "desv": 36.661735368592225
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:14",
+                "media": 140.76923076923077,
+                "desv": 22.49496985192586
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:14",
+                "media": 95.76923076923077,
+                "desv": 2.8326080983879955
+            }
+        },
+        "alerta": false,
+        "prev_hash": "100eab4a9856dbbb8212fb85db421d67e8f4bd5cb71280685bc54b9b98d52d96",
+        "hash": "69b23b074a7e55592cfdf0485cc751184cc0cb45ef94f0f9c3271ccc6ec33b5e"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:15",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:15",
+                "media": 122.21428571428571,
+                "desv": 35.579244694923254
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:15",
+                "media": 141.78571428571428,
+                "desv": 21.98434043790707
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:15",
+                "media": 95.5,
+                "desv": 2.8970428272390354
+            }
+        },
+        "alerta": false,
+        "prev_hash": "69b23b074a7e55592cfdf0485cc751184cc0cb45ef94f0f9c3271ccc6ec33b5e",
+        "hash": "f622997a5d973b2ccb356ba83f76d34f231fdf8a16bab236989f139a9d30aa40"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:16",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:16",
+                "media": 118.46666666666667,
+                "desv": 37.122978807681314
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:16",
+                "media": 143.0,
+                "desv": 21.719422951205065
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:16",
+                "media": 95.2,
+                "desv": 3.0155154341063044
+            }
+        },
+        "alerta": false,
+        "prev_hash": "f622997a5d973b2ccb356ba83f76d34f231fdf8a16bab236989f139a9d30aa40",
+        "hash": "88ff266521bf54e8336a607474748f9c4751760c14b55885f10c0006f7a15d7d"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:17",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:17",
+                "media": 116.875,
+                "desv": 36.46895083492257
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:17",
+                "media": 144.5625,
+                "desv": 21.88312349163163
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:17",
+                "media": 95.125,
+                "desv": 2.9341736485763756
+            }
+        },
+        "alerta": false,
+        "prev_hash": "88ff266521bf54e8336a607474748f9c4751760c14b55885f10c0006f7a15d7d",
+        "hash": "a8b5d9180d8faca89ccafb687dfd7b62ea0ee98b5e4fe5060b6364a1ac06c17e"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:18",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:18",
+                "media": 118.0,
+                "desv": 35.66510900025401
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:18",
+                "media": 146.2941176470588,
+                "desv": 22.3311038843144
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:18",
+                "media": 95.05882352941177,
+                "desv": 2.8588477365230274
+            }
+        },
+        "alerta": false,
+        "prev_hash": "a8b5d9180d8faca89ccafb687dfd7b62ea0ee98b5e4fe5060b6364a1ac06c17e",
+        "hash": "907c6a995c1fd5c6e24cda228f1f7790083f2902b868e41345ee2219469354e1"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:19",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:19",
+                "media": 119.33333333333333,
+                "desv": 35.09352583533828
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:19",
+                "media": 144.72222222222223,
+                "desv": 22.649026360127017
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:19",
+                "media": 95.16666666666667,
+                "desv": 2.813657169355688
+            }
+        },
+        "alerta": false,
+        "prev_hash": "907c6a995c1fd5c6e24cda228f1f7790083f2902b868e41345ee2219469354e1",
+        "hash": "72483337408b1372ea4db0fab9690a73ef1ad2f4d205761d672a086674495056"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:20",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:20",
+                "media": 120.42105263157895,
+                "desv": 34.467858085428375
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:20",
+                "media": 145.94736842105263,
+                "desv": 22.64944215465135
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:20",
+                "media": 95.42105263157895,
+                "desv": 2.943606621917803
+            }
+        },
+        "alerta": false,
+        "prev_hash": "72483337408b1372ea4db0fab9690a73ef1ad2f4d205761d672a086674495056",
+        "hash": "3aea920bba7e6362e8c1851d1d3c377962473b7ebdb2843ff8d183051f62e3a8"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:21",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:21",
+                "media": 120.8,
+                "desv": 33.63569532505608
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:21",
+                "media": 145.15,
+                "desv": 22.34787461930105
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:21",
+                "media": 95.55,
+                "desv": 2.923610781208744
+            }
+        },
+        "alerta": false,
+        "prev_hash": "3aea920bba7e6362e8c1851d1d3c377962473b7ebdb2843ff8d183051f62e3a8",
+        "hash": "ecb4549c0ce558ac8ea72d1f117434efba4a47a9bc0523b04ff82ce16c2a7b2b"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:22",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:22",
+                "media": 121.57142857142857,
+                "desv": 33.00587455441896
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:22",
+                "media": 143.71428571428572,
+                "desv": 22.734791582491354
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:22",
+                "media": 95.66666666666667,
+                "desv": 2.9004652062554404
+            }
+        },
+        "alerta": false,
+        "prev_hash": "ecb4549c0ce558ac8ea72d1f117434efba4a47a9bc0523b04ff82ce16c2a7b2b",
+        "hash": "123f9c3c3c60a4d64c12950a8e4e235ef27d1a05ab1bcd0d97c6880aa5549b4d"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:23",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:23",
+                "media": 119.04545454545455,
+                "desv": 34.261663273226155
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:23",
+                "media": 145.0909090909091,
+                "desv": 23.090551178328514
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:23",
+                "media": 95.4090909090909,
+                "desv": 3.06978072816419
+            }
+        },
+        "alerta": false,
+        "prev_hash": "123f9c3c3c60a4d64c12950a8e4e235ef27d1a05ab1bcd0d97c6880aa5549b4d",
+        "hash": "97acbaa248f2ace6a2ec7c848846c860d4782df460c9607c0ca35b3fb4878547"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:24",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:24",
+                "media": 119.56521739130434,
+                "desv": 33.59713508355
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:24",
+                "media": 146.43478260869566,
+                "desv": 23.446193882194112
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:24",
+                "media": 95.21739130434783,
+                "desv": 3.1340558766852347
+            }
+        },
+        "alerta": false,
+        "prev_hash": "97acbaa248f2ace6a2ec7c848846c860d4782df460c9607c0ca35b3fb4878547",
+        "hash": "adcba5664cbd68b96514c0193ec662e674b975c9bc8db021d48d3f2c69e55886"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:26",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:26",
+                "media": 119.91666666666667,
+                "desv": 32.932907385909445
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:26",
+                "media": 145.75,
+                "desv": 23.186292646015374
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:26",
+                "media": 95.04166666666667,
+                "desv": 3.1817077001020833
+            }
+        },
+        "alerta": false,
+        "prev_hash": "adcba5664cbd68b96514c0193ec662e674b975c9bc8db021d48d3f2c69e55886",
+        "hash": "b5d480dfef40b1f68308be14092e76bac4e42a352969c4a6a62a80f7f090fb50"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:27",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:27",
+                "media": 118.72,
+                "desv": 32.79575582297197
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:27",
+                "media": 144.68,
+                "desv": 23.314750695643305
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:27",
+                "media": 95.24,
+                "desv": 3.265333061113368
+            }
+        },
+        "alerta": false,
+        "prev_hash": "b5d480dfef40b1f68308be14092e76bac4e42a352969c4a6a62a80f7f090fb50",
+        "hash": "3d2ce07c5f323d36ce2b46f88e2d52edf0d514b30f129bfb982886ae1ad7ec94"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:28",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:28",
+                "media": 118.53846153846153,
+                "desv": 32.1716917721044
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:28",
+                "media": 145.34615384615384,
+                "desv": 23.103350252710282
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:28",
+                "media": 95.1923076923077,
+                "desv": 3.2107898712985152
+            }
+        },
+        "alerta": false,
+        "prev_hash": "3d2ce07c5f323d36ce2b46f88e2d52edf0d514b30f129bfb982886ae1ad7ec94",
+        "hash": "79214e5b68592ec922b8f3374c3a825672d3a3b2e2a00963f0e48fbe8f298e73"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:29",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:29",
+                "media": 120.81481481481481,
+                "desv": 33.636440817833744
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:29",
+                "media": 146.55555555555554,
+                "desv": 23.49520571005976
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:29",
+                "media": 95.07407407407408,
+                "desv": 3.207929133856664
+            }
+        },
+        "alerta": false,
+        "prev_hash": "79214e5b68592ec922b8f3374c3a825672d3a3b2e2a00963f0e48fbe8f298e73",
+        "hash": "3ea8390eb5336289758292801169fee6c9816a2ac6447b21803367daf70fe640"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:30",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:30",
+                "media": 122.85714285714286,
+                "desv": 34.69326229946662
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:30",
+                "media": 146.92857142857142,
+                "desv": 23.153106196158912
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:30",
+                "media": 95.14285714285714,
+                "desv": 3.170334431596021
+            }
+        },
+        "alerta": false,
+        "prev_hash": "3ea8390eb5336289758292801169fee6c9816a2ac6447b21803367daf70fe640",
+        "hash": "fd134522992bd5806861884b93d7216db68716f7aa034d77ec8820326401195a"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:31",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:31",
+                "media": 121.58620689655173,
+                "desv": 34.74688499199387
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:31",
+                "media": 147.48275862068965,
+                "desv": 22.938629802531754
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:31",
+                "media": 95.24137931034483,
+                "desv": 3.1585152820839966
+            }
+        },
+        "alerta": false,
+        "prev_hash": "fd134522992bd5806861884b93d7216db68716f7aa034d77ec8820326401195a",
+        "hash": "0c90e5855264c9f076650a7408191a2ad4aeade80e549333b6f04253a5f7b5d9"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:32",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:32",
+                "media": 119.8,
+                "desv": 35.49121957141888
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:32",
+                "media": 146.56666666666666,
+                "desv": 23.086335544838832
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:32",
+                "media": 95.16666666666667,
+                "desv": 3.131382371342656
+            }
+        },
+        "alerta": false,
+        "prev_hash": "0c90e5855264c9f076650a7408191a2ad4aeade80e549333b6f04253a5f7b5d9",
+        "hash": "174794c09461fef20a2a59abde1909f20a801be738e8a50a27b6ae4ac8cc2641"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:33",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:33",
+                "media": 119.46666666666667,
+                "desv": 35.55346521633143
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:33",
+                "media": 146.5,
+                "desv": 23.136911346734827
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:33",
+                "media": 95.16666666666667,
+                "desv": 3.131382371342656
+            }
+        },
+        "alerta": false,
+        "prev_hash": "174794c09461fef20a2a59abde1909f20a801be738e8a50a27b6ae4ac8cc2641",
+        "hash": "cc324d54b8528c6a314da8afb8496791da594516bc79c00be29e6bd214468fc6"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:34",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:34",
+                "media": 118.1,
+                "desv": 34.232878932394804
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:34",
+                "media": 146.13333333333333,
+                "desv": 22.73431082942452
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:34",
+                "media": 95.36666666666666,
+                "desv": 3.2401988965014
+            }
+        },
+        "alerta": false,
+        "prev_hash": "cc324d54b8528c6a314da8afb8496791da594516bc79c00be29e6bd214468fc6",
+        "hash": "4ababded600c2947bcf2e6e55c3ef3b8f7a4589ed856dcab7e110b654b12469d"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:35",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:35",
+                "media": 120.2,
+                "desv": 34.069928089152164
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:35",
+                "media": 147.03333333333333,
+                "desv": 21.84259345610976
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:35",
+                "media": 95.3,
+                "desv": 3.3080709383768254
+            }
+        },
+        "alerta": false,
+        "prev_hash": "4ababded600c2947bcf2e6e55c3ef3b8f7a4589ed856dcab7e110b654b12469d",
+        "hash": "06af5e41dd114e7d0c422b8ed23735c31f3ea54563f2e95281a8e80510402df8"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:36",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:36",
+                "media": 120.43333333333334,
+                "desv": 34.377980678852495
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:36",
+                "media": 147.26666666666668,
+                "desv": 21.73926299476492
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:36",
+                "media": 95.3,
+                "desv": 3.3080709383768254
+            }
+        },
+        "alerta": false,
+        "prev_hash": "06af5e41dd114e7d0c422b8ed23735c31f3ea54563f2e95281a8e80510402df8",
+        "hash": "b7d191958e7b4a1d8fd3385e710caa6ce16866b8540ca8430ba45fee60205391"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:37",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:37",
+                "media": 120.76666666666667,
+                "desv": 34.70032020345378
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:37",
+                "media": 146.93333333333334,
+                "desv": 21.893580997381147
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:37",
+                "media": 95.16666666666667,
+                "desv": 3.2770243955284935
+            }
+        },
+        "alerta": false,
+        "prev_hash": "b7d191958e7b4a1d8fd3385e710caa6ce16866b8540ca8430ba45fee60205391",
+        "hash": "094a77de2ccfd6c80fba2a0120ae5dd4b7cb57edc99049a53d98372137a4bb68"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:38",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:38",
+                "media": 121.33333333333333,
+                "desv": 35.000317458877745
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:38",
+                "media": 146.36666666666667,
+                "desv": 22.560264970863162
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:38",
+                "media": 95.13333333333334,
+                "desv": 3.2734623192509114
+            }
+        },
+        "alerta": false,
+        "prev_hash": "094a77de2ccfd6c80fba2a0120ae5dd4b7cb57edc99049a53d98372137a4bb68",
+        "hash": "2ff94d570af5c6f805280b4931a259105eda4316082ee7811ca8f1b1e156db65"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:39",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:39",
+                "media": 119.93333333333334,
+                "desv": 34.58316867430681
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:39",
+                "media": 145.76666666666668,
+                "desv": 22.15954772903896
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:39",
+                "media": 94.83333333333333,
+                "desv": 3.3174622161458838
+            }
+        },
+        "alerta": false,
+        "prev_hash": "2ff94d570af5c6f805280b4931a259105eda4316082ee7811ca8f1b1e156db65",
+        "hash": "11c7686fb5c3f667d3a317246860e7e4293d6d37b5782603166b6536549aa4a2"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:40",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:40",
+                "media": 116.5,
+                "desv": 34.155282656323216
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:40",
+                "media": 146.03333333333333,
+                "desv": 21.77228105234319
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:40",
+                "media": 94.76666666666667,
+                "desv": 3.2932591084753047
+            }
+        },
+        "alerta": false,
+        "prev_hash": "11c7686fb5c3f667d3a317246860e7e4293d6d37b5782603166b6536549aa4a2",
+        "hash": "90e8bed73faa5d0d47c84a5655e7ba914f4a24ec0e8af9dfbb66cc27912168f1"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:41",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:41",
+                "media": 115.03333333333333,
+                "desv": 35.53447465334036
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:41",
+                "media": 146.03333333333333,
+                "desv": 21.77228105234319
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:41",
+                "media": 94.63333333333334,
+                "desv": 3.2401988965013997
+            }
+        },
+        "alerta": false,
+        "prev_hash": "90e8bed73faa5d0d47c84a5655e7ba914f4a24ec0e8af9dfbb66cc27912168f1",
+        "hash": "878289c0a974b193928c4e83015152115878dd8f644ec5a23a20b477ba065ebf"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:42",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:42",
+                "media": 114.9,
+                "desv": 35.60931526066365
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:42",
+                "media": 147.16666666666666,
+                "desv": 21.213334380892494
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:42",
+                "media": 94.5,
+                "desv": 3.095695936834452
+            }
+        },
+        "alerta": false,
+        "prev_hash": "878289c0a974b193928c4e83015152115878dd8f644ec5a23a20b477ba065ebf",
+        "hash": "a49b04aefe266a8fc481208a83ff6cb5ccc5f71d2ddb95bcefd84d1869fd6341"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:43",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:43",
+                "media": 115.3,
+                "desv": 35.16736176248274
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:43",
+                "media": 146.03333333333333,
+                "desv": 21.191953399554485
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:43",
+                "media": 94.43333333333334,
+                "desv": 3.1694724412046176
+            }
+        },
+        "alerta": false,
+        "prev_hash": "a49b04aefe266a8fc481208a83ff6cb5ccc5f71d2ddb95bcefd84d1869fd6341",
+        "hash": "f0f5fb6bfc350b52d08520204f85aab8b97ba4823f284972f9b1b6b7fee890d9"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:44",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:44",
+                "media": 115.06666666666666,
+                "desv": 35.10549181475109
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:44",
+                "media": 145.13333333333333,
+                "desv": 20.636106437234925
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:44",
+                "media": 94.4,
+                "desv": 3.126233090051562
+            }
+        },
+        "alerta": false,
+        "prev_hash": "f0f5fb6bfc350b52d08520204f85aab8b97ba4823f284972f9b1b6b7fee890d9",
+        "hash": "2c8b2dab80b02d9fd04363c0f182d329800bf154b17a0b301bd8cd39c355a4ac"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:45",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:45",
+                "media": 117.23333333333333,
+                "desv": 33.614166986885486
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:45",
+                "media": 145.8,
+                "desv": 20.29515541535303
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:45",
+                "media": 94.4,
+                "desv": 3.1262330900515614
+            }
+        },
+        "alerta": false,
+        "prev_hash": "2c8b2dab80b02d9fd04363c0f182d329800bf154b17a0b301bd8cd39c355a4ac",
+        "hash": "c1d5b6c7cef571c7342c9be96635ac8bce41bc8233fef8910e759519f190ad64"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:46",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:46",
+                "media": 117.0,
+                "desv": 33.70855479943729
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:46",
+                "media": 144.53333333333333,
+                "desv": 20.859423663072658
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:46",
+                "media": 94.66666666666667,
+                "desv": 3.2489314482696545
+            }
+        },
+        "alerta": false,
+        "prev_hash": "c1d5b6c7cef571c7342c9be96635ac8bce41bc8233fef8910e759519f190ad64",
+        "hash": "bcb28b9c9abf0589984970c313128b6f9c0b465d386da04e2afc50610e7a1954"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:47",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:47",
+                "media": 117.93333333333334,
+                "desv": 32.65469168264935
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:47",
+                "media": 143.43333333333334,
+                "desv": 20.884896190522202
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:47",
+                "media": 94.76666666666667,
+                "desv": 3.179972047396364
+            }
+        },
+        "alerta": false,
+        "prev_hash": "bcb28b9c9abf0589984970c313128b6f9c0b465d386da04e2afc50610e7a1954",
+        "hash": "ad4d7b60e3e409c65eba0d8aa8f83ca41382e480cca850284992a0f9bd502e10"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:48",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:48",
+                "media": 120.36666666666666,
+                "desv": 33.41704488564015
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:48",
+                "media": 142.2,
+                "desv": 20.48641826511734
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:48",
+                "media": 94.7,
+                "desv": 3.216105305075276
+            }
+        },
+        "alerta": false,
+        "prev_hash": "ad4d7b60e3e409c65eba0d8aa8f83ca41382e480cca850284992a0f9bd502e10",
+        "hash": "ab8c26aa8a93d4aa60da2d91726f7253bdfc55ede81a81b881f80a1c711499f4"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:49",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:49",
+                "media": 120.36666666666666,
+                "desv": 33.41704488564015
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:49",
+                "media": 141.66666666666666,
+                "desv": 19.84999300307741
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:49",
+                "media": 94.7,
+                "desv": 3.216105305075276
+            }
+        },
+        "alerta": false,
+        "prev_hash": "ab8c26aa8a93d4aa60da2d91726f7253bdfc55ede81a81b881f80a1c711499f4",
+        "hash": "a407a9c9fd0a028eb937f556f0155416ae3095c5624df513cda4d569b9655e0b"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:50",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:50",
+                "media": 120.36666666666666,
+                "desv": 33.41704488564015
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:50",
+                "media": 142.26666666666668,
+                "desv": 19.392323796343288
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:50",
+                "media": 94.6,
+                "desv": 3.1895663237081835
+            }
+        },
+        "alerta": false,
+        "prev_hash": "a407a9c9fd0a028eb937f556f0155416ae3095c5624df513cda4d569b9655e0b",
+        "hash": "f3b7f84b773cda97c38b6f21de81e83ec4a7045146b93a87b6830aca54569374"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:51",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:51",
+                "media": 119.13333333333334,
+                "desv": 33.352394550050256
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:51",
+                "media": 140.43333333333334,
+                "desv": 19.472516244411988
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:51",
+                "media": 94.53333333333333,
+                "desv": 3.0955164709983727
+            }
+        },
+        "alerta": false,
+        "prev_hash": "f3b7f84b773cda97c38b6f21de81e83ec4a7045146b93a87b6830aca54569374",
+        "hash": "84b70ec2b16b8a2759537b4fc1933ca7d891e4b5a9c32359c6a4eed0f70c5e3e"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:52",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:52",
+                "media": 117.8,
+                "desv": 33.76822964464281
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:52",
+                "media": 139.83333333333334,
+                "desv": 20.053400930737133
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:52",
+                "media": 94.56666666666666,
+                "desv": 3.137762826530323
+            }
+        },
+        "alerta": false,
+        "prev_hash": "84b70ec2b16b8a2759537b4fc1933ca7d891e4b5a9c32359c6a4eed0f70c5e3e",
+        "hash": "2e8ae905922e0e119662327f70249fd1099ac97eff54ef9018fe315ff574d949"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:53",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:53",
+                "media": 115.7,
+                "desv": 34.46075062057316
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:53",
+                "media": 142.0,
+                "desv": 20.752509888364507
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:53",
+                "media": 94.46666666666667,
+                "desv": 3.0739045022396003
+            }
+        },
+        "alerta": false,
+        "prev_hash": "2e8ae905922e0e119662327f70249fd1099ac97eff54ef9018fe315ff574d949",
+        "hash": "f5bd6fa5bfbd6845dd8dcb673feb399e8bc54b50e80e48cf8ecfa5ccb21efece"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:54",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:54",
+                "media": 117.56666666666666,
+                "desv": 33.21212964498898
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:54",
+                "media": 141.63333333333333,
+                "desv": 20.27557370061052
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:54",
+                "media": 94.76666666666667,
+                "desv": 3.0624971655315685
+            }
+        },
+        "alerta": false,
+        "prev_hash": "f5bd6fa5bfbd6845dd8dcb673feb399e8bc54b50e80e48cf8ecfa5ccb21efece",
+        "hash": "ec81ead57fb2f1b6059895964bee29e03ddfd6ad82ad40cd3d8f32b56e56d4de"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:55",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:55",
+                "media": 116.43333333333334,
+                "desv": 33.3143445914152
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:55",
+                "media": 140.03333333333333,
+                "desv": 19.374353035793366
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:55",
+                "media": 94.93333333333334,
+                "desv": 2.9881246441353295
+            }
+        },
+        "alerta": false,
+        "prev_hash": "ec81ead57fb2f1b6059895964bee29e03ddfd6ad82ad40cd3d8f32b56e56d4de",
+        "hash": "36d41c652a63e761f3a5d07700d80d3c056905095470f5e9c0e3b47b7800312b"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:56",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:56",
+                "media": 118.16666666666667,
+                "desv": 35.17203750456066
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:56",
+                "media": 141.23333333333332,
+                "desv": 19.825376555202062
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:56",
+                "media": 94.96666666666667,
+                "desv": 2.949387883763152
+            }
+        },
+        "alerta": false,
+        "prev_hash": "36d41c652a63e761f3a5d07700d80d3c056905095470f5e9c0e3b47b7800312b",
+        "hash": "5d3e9280900ee04b455587b351f6444c1f285831281d8b659ccc402a7813bb67"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:57",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:57",
+                "media": 118.13333333333334,
+                "desv": 35.19917928336145
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:57",
+                "media": 142.66666666666666,
+                "desv": 19.72026594366539
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:57",
+                "media": 94.86666666666666,
+                "desv": 2.8252826800556123
+            }
+        },
+        "alerta": false,
+        "prev_hash": "5d3e9280900ee04b455587b351f6444c1f285831281d8b659ccc402a7813bb67",
+        "hash": "7448b1e7e5b87b9878ded06ed821a85ca2ecd71930d8add808f93150d29afa58"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:58",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:58",
+                "media": 118.46666666666667,
+                "desv": 35.20580760171379
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:58",
+                "media": 141.1,
+                "desv": 19.987245933344592
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:58",
+                "media": 94.73333333333333,
+                "desv": 2.9544693074880453
+            }
+        },
+        "alerta": false,
+        "prev_hash": "7448b1e7e5b87b9878ded06ed821a85ca2ecd71930d8add808f93150d29afa58",
+        "hash": "184890333832c9de4d83b154b85304bdcd0e62f05b2da56bdb55861f4c46c5bf"
+    },
+    {
+        "timestamp": "2025-07-19T18:30:59",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:30:59",
+                "media": 116.93333333333334,
+                "desv": 33.45039445042298
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:30:59",
+                "media": 139.2,
+                "desv": 19.077735714701575
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:30:59",
+                "media": 94.76666666666667,
+                "desv": 2.928974033495157
+            }
+        },
+        "alerta": false,
+        "prev_hash": "184890333832c9de4d83b154b85304bdcd0e62f05b2da56bdb55861f4c46c5bf",
+        "hash": "6c860a76b4292549c81bb89838464907ae0a38963dbe7f3d3538a51ba87f95e8"
+    },
+    {
+        "timestamp": "2025-07-19T18:31:00",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:31:00",
+                "media": 115.26666666666667,
+                "desv": 31.55834103511921
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:31:00",
+                "media": 137.76666666666668,
+                "desv": 19.300575696652736
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:31:00",
+                "media": 94.76666666666667,
+                "desv": 2.928974033495157
+            }
+        },
+        "alerta": false,
+        "prev_hash": "6c860a76b4292549c81bb89838464907ae0a38963dbe7f3d3538a51ba87f95e8",
+        "hash": "288671a2dfdd9bc7b9864a5881d73b0d680f09ac07bf646ce371c943640d421f"
+    },
+    {
+        "timestamp": "2025-07-19T18:31:01",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:31:01",
+                "media": 115.83333333333333,
+                "desv": 31.17807277915398
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:31:01",
+                "media": 137.83333333333334,
+                "desv": 19.390862682087036
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:31:01",
+                "media": 94.6,
+                "desv": 2.8821288428289713
+            }
+        },
+        "alerta": false,
+        "prev_hash": "288671a2dfdd9bc7b9864a5881d73b0d680f09ac07bf646ce371c943640d421f",
+        "hash": "1e1e2dbb064a3d12513c26a46998c0bc505e2c6a4f23c01281b9aec6a4baf386"
+    },
+    {
+        "timestamp": "2025-07-19T18:31:02",
+        "datos": {
+            "frecuencia": {
+                "tipo": "frecuencia",
+                "timestamp": "2025-07-19T18:31:02",
+                "media": 118.83333333333333,
+                "desv": 30.758287049545235
+            },
+            "presion": {
+                "tipo": "presion",
+                "timestamp": "2025-07-19T18:31:02",
+                "media": 139.33333333333334,
+                "desv": 19.69150973276441
+            },
+            "oxigeno": {
+                "tipo": "oxigeno",
+                "timestamp": "2025-07-19T18:31:02",
+                "media": 94.63333333333334,
+                "desv": 2.869184940400709
+            }
+        },
+        "alerta": false,
+        "prev_hash": "1e1e2dbb064a3d12513c26a46998c0bc505e2c6a4f23c01281b9aec6a4baf386",
+        "hash": "adadee7e010134193b5f2c6cf1b8af65ed563d0aa9ca869ce0afb9503cf58ebb"
+    }
+]

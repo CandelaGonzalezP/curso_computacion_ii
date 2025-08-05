@@ -1,5 +1,5 @@
-# Verificación y Construcción de Bloques 
-
+# sistema_biometrico.py
+# Trabajo Práctico - Sistema Concurrente de Análisis Biométrico con Cadena de Bloques Local
 
 import multiprocessing
 import hashlib
@@ -10,20 +10,21 @@ import datetime
 import random
 import numpy as np
 
-# =============================
-# Función para generar datos biométricos
-# =============================
-def generar_dato():
+# ========== TAREA 1: Generación y Análisis Concurrente ==========
+
+def generar_dato(i):
+    # Fuerza un valor fuera de rango cada 10 muestras
+    frecuencia = random.randint(60, 180)
+    if i % 10 == 0:
+        frecuencia = random.randint(210, 230)  # fuera de rango intencional
+
     return {
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-        "frecuencia": random.randint(60, 180),
+        "frecuencia": frecuencia,
         "presion": [random.randint(110, 180), random.randint(70, 110)],
         "oxigeno": random.randint(90, 100)
     }
 
-# =============================
-# Analizador
-# =============================
 def proceso_analizador(nombre, pipe_entrada, queue_salida):
     ventana = []
     for _ in range(60):
@@ -37,6 +38,8 @@ def proceso_analizador(nombre, pipe_entrada, queue_salida):
                 valor = paquete["presion"][0]  # sistólica
             elif nombre == "oxigeno":
                 valor = paquete["oxigeno"]
+            else:
+                continue
 
             ventana.append(valor)
             if len(ventana) > 30:
@@ -57,38 +60,37 @@ def proceso_analizador(nombre, pipe_entrada, queue_salida):
         except EOFError:
             break
 
-# =============================
-# Proceso Verificador y Cadena de Bloques
-# =============================
+# ========== TAREA 2: Verificador y Blockchain ==========
+
+def calcular_hash(prev_hash, datos, timestamp):
+    bloque_str = f"{prev_hash}{json.dumps(datos, sort_keys=True)}{timestamp}"
+    return hashlib.sha256(bloque_str.encode()).hexdigest()
+
 def proceso_verificador(queue_a, queue_b, queue_c):
     blockchain = []
     prev_hash = "0"
 
+    os.makedirs("output", exist_ok=True)
+
     for i in range(60):
-        # Esperar los tres resultados
         resultado_a = queue_a.get()
         resultado_b = queue_b.get()
         resultado_c = queue_c.get()
 
-        # Asegurarse de que sean del mismo timestamp (simplificado)
         timestamp = resultado_a["timestamp"]
 
-        # Reorganizar por tipo
         resultados = {
             resultado_a["tipo"]: resultado_a,
             resultado_b["tipo"]: resultado_b,
             resultado_c["tipo"]: resultado_c
         }
 
-        # Verificación
         alerta = (
             resultados["frecuencia"]["media"] >= 200 or
-            resultados["oxigeno"]["media"] < 90 or
-            resultados["oxigeno"]["media"] > 100 or
+            resultados["oxigeno"]["media"] < 90 or resultados["oxigeno"]["media"] > 100 or
             resultados["presion"]["media"] >= 200
         )
 
-        # Crear bloque
         bloque = {
             "timestamp": timestamp,
             "datos": resultados,
@@ -96,26 +98,20 @@ def proceso_verificador(queue_a, queue_b, queue_c):
             "prev_hash": prev_hash
         }
 
-        bloque_str = f'{prev_hash}{json.dumps(resultados, sort_keys=True)}{timestamp}'
-        bloque["hash"] = hashlib.sha256(bloque_str.encode()).hexdigest()
-
-        # Guardar en memoria
+        bloque["hash"] = calcular_hash(prev_hash, resultados, timestamp)
         blockchain.append(bloque)
         prev_hash = bloque["hash"]
 
-        # Mostrar
         print(f"[Bloque #{i+1}] Hash: {bloque['hash']} | ALERTA: {alerta}")
 
-    # Guardar en archivo
-    with open("blockchain.json", "w") as f:
+    with open("output/blockchain.json", "w") as f:
         json.dump(blockchain, f, indent=4)
 
-# =============================
-# Generador
-# =============================
+# ========== Proceso Principal ==========
+
 def proceso_principal(pipes_salida):
-    for _ in range(60):
-        dato = generar_dato()
+    for i in range(60):
+        dato = generar_dato(i)
         for pipe in pipes_salida:
             pipe.send(dato)
         time.sleep(1)
@@ -123,38 +119,31 @@ def proceso_principal(pipes_salida):
     for pipe in pipes_salida:
         pipe.close()
 
-# =============================
-# Main
-# =============================
+# ========== Main ==========
+
 if __name__ == "__main__":
     multiprocessing.set_start_method('spawn')
 
-    # Pipes
     principal_a, a_entrada = multiprocessing.Pipe()
     principal_b, b_entrada = multiprocessing.Pipe()
     principal_c, c_entrada = multiprocessing.Pipe()
 
-    # Queues
     queue_a = multiprocessing.Queue()
     queue_b = multiprocessing.Queue()
     queue_c = multiprocessing.Queue()
 
-    # Procesos
     analizador_a = multiprocessing.Process(target=proceso_analizador, args=("frecuencia", a_entrada, queue_a))
     analizador_b = multiprocessing.Process(target=proceso_analizador, args=("presion", b_entrada, queue_b))
     analizador_c = multiprocessing.Process(target=proceso_analizador, args=("oxigeno", c_entrada, queue_c))
     verificador = multiprocessing.Process(target=proceso_verificador, args=(queue_a, queue_b, queue_c))
 
-    # Iniciar procesos
     analizador_a.start()
     analizador_b.start()
     analizador_c.start()
     verificador.start()
 
-    # Ejecutar generador
     proceso_principal([principal_a, principal_b, principal_c])
 
-    # Esperar a que terminen
     analizador_a.join()
     analizador_b.join()
     analizador_c.join()
