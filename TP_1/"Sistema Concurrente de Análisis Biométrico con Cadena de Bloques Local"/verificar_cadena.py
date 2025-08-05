@@ -1,4 +1,3 @@
-# verificar_cadena.py
 # Tarea 3: Verificación de integridad y generación de reporte
 
 import json

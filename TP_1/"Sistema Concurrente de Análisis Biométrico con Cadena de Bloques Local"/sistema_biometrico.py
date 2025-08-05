@@ -1,6 +1,3 @@
-# sistema_biometrico.py
-# Trabajo Práctico - Sistema Concurrente de Análisis Biométrico con Cadena de Bloques Local
-
 import multiprocessing
 import hashlib
 import json

@@ -1,0 +1,41 @@
+Instrucciones de uso - Sistema Concurrente de Análisis Biométrico con Cadena de Bloques Local
+=============================================================================================
+
+Este sistema simula una prueba de esfuerzo biométrica, procesa las señales en paralelo y valida los resultados utilizando una cadena de bloques local.
+
+Requisitos previos:
+-------------------
+- Python 3.9 o superior
+- Librerías utilizadas: numpy, hashlib, multiprocessing, queue, os, json, datetime, random
+
+Pasos para usar el sistema:
+---------------------------
+
+1. Ejecutar el sistema de análisis completo:
+
+   python sistema_biometrico.py
+
+   Esto iniciará el proceso principal (generador) y los subprocesos analizador y verificador.
+   - Se generarán 60 muestras (1 por segundo).
+   - Los resultados serán guardados en `output/blockchain.json`.
+   - En la terminal se mostrará el hash y estado de cada bloque generado.
+
+2. Verificar la integridad de la cadena de bloques y generar un informe:
+
+   python verificar_cadena.py
+
+   Este script:
+   - Verifica la validez de todos los bloques.
+   - Calcula el promedio de los valores biométricos.
+   - Cuenta la cantidad de bloques con alertas.
+   - Informa si hay algún bloque corrupto.
+
+   El resultado se guarda en un archivo llamado `reporte.txt`.
+
+3. Revisar el reporte generado:
+
+   Abrir el archivo `reporte.txt` para ver:
+   - Total de bloques procesados.
+   - Cantidad de bloques con alertas.
+   - Promedios generales de frecuencia, presión y oxígeno.
+   - Estado de la cadena de bloques (válida o no).
