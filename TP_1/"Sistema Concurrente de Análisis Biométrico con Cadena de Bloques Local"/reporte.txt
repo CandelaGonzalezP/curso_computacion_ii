@@ -4,6 +4,3 @@ Bloques corruptos: 0 -> []
 Promedio frecuencia: 121.83
 Promedio presión sistólica: 143.07
 Promedio oxígeno: 94.99
-
-
-# este es con sistema_biometrico.py --> no tiene ningun true
