@@ -1,4 +1,3 @@
-README = """
 # Sistema Concurrente de Análisis Biométrico con Cadena de Bloques Local
 
 ## 📌 Descripción
@@ -95,7 +94,4 @@ Ejemplo de reporte.txt:
 
 ## 👩‍💻 Autor
 Candela González — Ingeniería Informática, Universidad de Mendoza.
-"""
 
-if __name__ == "__main__":
-    print(README)
