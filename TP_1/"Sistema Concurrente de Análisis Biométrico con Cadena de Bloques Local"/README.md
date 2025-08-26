@@ -86,9 +86,18 @@ Ejemplo de reporte.txt:
     Total de bloques: 60
     Bloques con alertas: 1
     Bloques corruptos: 0 -> []
+
     Promedio frecuencia: 130.31
     Promedio presión sistólica: 144.67
     Promedio oxígeno: 94.13
+
+    Verificación de Integridad:
+    ✔ La cadena de bloques mantiene su integridad.
+    
+    Fecha de generación del reporte:
+    2025-08-26
+    Hora de generación del reporte:
+    10:16:41
 
 ---
 

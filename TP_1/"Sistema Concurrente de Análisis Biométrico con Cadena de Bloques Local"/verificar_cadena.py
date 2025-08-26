@@ -2,6 +2,8 @@
 
 import json
 import hashlib
+import os
+from datetime import datetime
 
 
 def calcular_hash(prev_hash, datos, timestamp):
@@ -9,7 +11,10 @@ def calcular_hash(prev_hash, datos, timestamp):
     return hashlib.sha256(bloque_str.encode()).hexdigest()
 
 
-def verificar_cadena_y_generar_reporte(ruta="output/blockchain.json"):
+def verificar_cadena_y_generar_reporte():
+    # Ruta absoluta al archivo blockchain.json, relativo al script actual
+    ruta = os.path.join(os.path.dirname(__file__), "output", "blockchain.json")
+
     with open(ruta, "r") as f:
         cadena = json.load(f)
 
@@ -25,6 +30,7 @@ def verificar_cadena_y_generar_reporte(ruta="output/blockchain.json"):
         prev_hash = bloque["prev_hash"]
         hash_actual = bloque["hash"]
 
+        # Recalcular hash
         hash_recalculado = calcular_hash(prev_hash, datos, timestamp)
 
         if hash_actual != hash_recalculado:
@@ -42,13 +48,40 @@ def verificar_cadena_y_generar_reporte(ruta="output/blockchain.json"):
     prom_pres = suma_pres / total_bloques
     prom_oxi = suma_oxi / total_bloques
 
-    with open("reporte.txt", "w") as f:
-        f.write(f"Total de bloques: {total_bloques}\n")
-        f.write(f"Bloques con alertas: {alertas}\n")
-        f.write(f"Bloques corruptos: {len(bloques_corruptos)} -> {bloques_corruptos}\n")
-        f.write(f"Promedio frecuencia: {prom_frec:.2f}\n")
-        f.write(f"Promedio presión sistólica: {prom_pres:.2f}\n")
-        f.write(f"Promedio oxígeno: {prom_oxi:.2f}\n")
+    # Construcción del reporte
+    contenido = []
+    contenido.append("=== REPORTE DE ANÁLISIS BIOMÉTRICO ===\n")
+    contenido.append("Este reporte resume la integridad de la cadena de bloques y los valores biométricos procesados.\n")
+
+    contenido.append("Información General:")
+    contenido.append(f"- Total de bloques: {total_bloques}")
+    contenido.append(f"- Bloques con alertas: {alertas}")
+    contenido.append(f"- Bloques corruptos: {len(bloques_corruptos)} -> {bloques_corruptos}\n")
+
+    contenido.append("Promedios Generales:")
+    contenido.append(f"- Frecuencia cardíaca promedio: {prom_frec:.2f} bpm")
+    contenido.append(f"- Presión sistólica promedio: {prom_pres:.2f} mmHg")
+    contenido.append(f"- Oxígeno en sangre promedio: {prom_oxi:.2f} %\n")
+
+    contenido.append("Verificación de Integridad:")
+    if len(bloques_corruptos) == 0:
+        contenido.append("✔ La cadena de bloques mantiene su integridad.\n")
+    else:
+        contenido.append("✘ Se detectaron bloques corruptos en la cadena.\n")
+
+    # Fecha y hora en párrafos separados
+    fecha_actual = datetime.now().strftime('%Y-%m-%d')
+    hora_actual = datetime.now().strftime('%H:%M:%S')
+
+    contenido.append("Fecha de generación del reporte:")
+    contenido.append(f"{fecha_actual}\n")
+    contenido.append("Hora de generación del reporte:")
+    contenido.append(f"{hora_actual}\n")
+
+    # Guardar reporte al lado del script
+    ruta_reporte = os.path.join(os.path.dirname(__file__), "reporte.txt")
+    with open(ruta_reporte, "w") as f:
+        f.write("\n".join(contenido))
 
     print("[✔] Verificación completa. Reporte generado como reporte.txt")
 

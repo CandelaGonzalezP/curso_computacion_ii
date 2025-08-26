@@ -62,7 +62,12 @@ def proceso_verificador(queue_a, queue_b, queue_c):
     blockchain = []
     prev_hash = "0"
 
-    os.makedirs("output", exist_ok=True)
+    # Obtén la ruta del directorio donde está ubicado este script
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Define la ruta para la carpeta "output" dentro del directorio del script
+    output_dir = os.path.join(script_dir, "output")
+    os.makedirs(output_dir, exist_ok=True)
 
     for i in range(60):
         resultado_a = queue_a.get()
@@ -96,7 +101,9 @@ def proceso_verificador(queue_a, queue_b, queue_c):
 
         print(f"[Bloque #{i+1}] Hash: {bloque['hash']} | ALERTA: {alerta}")
 
-    with open("output/blockchain.json", "w") as f:
+    # Guarda el archivo JSON dentro de la carpeta "output"
+    blockchain_path = os.path.join(output_dir, "blockchain.json")
+    with open(blockchain_path, "w") as f:
         json.dump(blockchain, f, indent=4)
 
 # ========== Proceso Principal ==========

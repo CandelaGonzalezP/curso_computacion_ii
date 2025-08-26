@@ -1,10 +1,22 @@
-                       REPORTE
----------------------------------------------------------
+=== REPORTE DE ANÁLISIS BIOMÉTRICO ===
 
-Total de bloques: 60
-Bloques con alertas: 0
-Bloques corruptos: 0 -> []
+Este reporte resume la integridad de la cadena de bloques y los valores biométricos procesados.
 
-Promedio frecuencia: 107.39
-Promedio presión sistólica: 148.06
-Promedio oxígeno: 95.10
+Información General:
+- Total de bloques: 60
+- Bloques con alertas: 0
+- Bloques corruptos: 0 -> []
+
+Promedios Generales:
+- Frecuencia cardíaca promedio: 119.21 bpm
+- Presión sistólica promedio: 144.85 mmHg
+- Oxígeno en sangre promedio: 95.03 %
+
+Verificación de Integridad:
+✔ La cadena de bloques mantiene su integridad.
+
+Fecha de generación del reporte:
+2025-08-26
+
+Hora de generación del reporte:
+10:16:41
