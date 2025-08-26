@@ -7,12 +7,30 @@ from datetime import datetime
 
 
 def calcular_hash(prev_hash, datos, timestamp):
+
+    """
+    Calcula el hash SHA-256 de un bloque a partir de:
+    - El hash previo
+    - Los datos biométricos
+    - El timestamp
+
+    Retorna el hash como string en hexadecimal.
+    """
+
     bloque_str = f"{prev_hash}{json.dumps(datos, sort_keys=True)}{timestamp}"
     return hashlib.sha256(bloque_str.encode()).hexdigest()
 
 
 def verificar_cadena_y_generar_reporte():
-    # Ruta absoluta al archivo blockchain.json, relativo al script actual
+
+    """
+    Verifica la integridad de la blockchain y genera un reporte:
+    - Comprueba que cada bloque tenga un hash válido.
+    - Cuenta la cantidad de bloques corruptos y con alertas.
+    - Calcula promedios generales de frecuencia, presión y oxígeno.
+    - Genera un archivo 'reporte.txt' con el resumen de resultados.
+    """
+
     ruta = os.path.join(os.path.dirname(__file__), "output", "blockchain.json")
 
     with open(ruta, "r") as f:
@@ -30,7 +48,6 @@ def verificar_cadena_y_generar_reporte():
         prev_hash = bloque["prev_hash"]
         hash_actual = bloque["hash"]
 
-        # Recalcular hash
         hash_recalculado = calcular_hash(prev_hash, datos, timestamp)
 
         if hash_actual != hash_recalculado:
@@ -69,7 +86,6 @@ def verificar_cadena_y_generar_reporte():
     else:
         contenido.append("✘ Se detectaron bloques corruptos en la cadena.\n")
 
-    # Fecha y hora en párrafos separados
     fecha_actual = datetime.now().strftime('%Y-%m-%d')
     hora_actual = datetime.now().strftime('%H:%M:%S')
 
@@ -78,7 +94,6 @@ def verificar_cadena_y_generar_reporte():
     contenido.append("Hora de generación del reporte:")
     contenido.append(f"{hora_actual}\n")
 
-    # Guardar reporte al lado del script
     ruta_reporte = os.path.join(os.path.dirname(__file__), "reporte.txt")
     with open(ruta_reporte, "w") as f:
         f.write("\n".join(contenido))

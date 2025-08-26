@@ -8,9 +8,9 @@ Información General:
 - Bloques corruptos: 0 -> []
 
 Promedios Generales:
-- Frecuencia cardíaca promedio: 119.21 bpm
-- Presión sistólica promedio: 144.85 mmHg
-- Oxígeno en sangre promedio: 95.03 %
+- Frecuencia cardíaca promedio: 119.43 bpm
+- Presión sistólica promedio: 143.36 mmHg
+- Oxígeno en sangre promedio: 94.59 %
 
 Verificación de Integridad:
 ✔ La cadena de bloques mantiene su integridad.
@@ -19,4 +19,4 @@ Fecha de generación del reporte:
 2025-08-26
 
 Hora de generación del reporte:
-10:16:41
+10:33:39

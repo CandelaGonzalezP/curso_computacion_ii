@@ -10,6 +10,15 @@ import numpy as np
 # ========== TAREA 1: Generación y Análisis Concurrente ==========
 
 def generar_dato():
+
+    """
+    Genera un paquete de datos biométricos simulados:
+    - Timestamp actual
+    - Frecuencia cardíaca (60-180)
+    - Presión arterial [sistólica, diastólica]
+    - Nivel de oxígeno en sangre (90-100)
+    """
+
     return {
         "timestamp": datetime.datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
         "frecuencia": random.randint(60, 180),
@@ -18,6 +27,15 @@ def generar_dato():
     }
 
 def proceso_analizador(nombre, pipe_entrada, queue_salida):
+
+    """
+    Procesa datos biométricos de un tipo específico (frecuencia, presión u oxígeno).
+    - Recibe datos desde un Pipe.
+    - Mantiene una ventana móvil de 30 valores.
+    - Calcula media y desviación estándar.
+    - Envía resultados procesados a una Queue.
+    """
+
     ventana = []
     for _ in range(60):
         try:
@@ -55,17 +73,32 @@ def proceso_analizador(nombre, pipe_entrada, queue_salida):
 # ========== TAREA 2: Verificador y Blockchain ==========
 
 def calcular_hash(prev_hash, datos, timestamp):
+
+    """
+    Calcula el hash SHA-256 de un bloque usando:
+    - El hash previo
+    - Los datos biométricos
+    - El timestamp
+    """
+
     bloque_str = f"{prev_hash}{json.dumps(datos, sort_keys=True)}{timestamp}"
     return hashlib.sha256(bloque_str.encode()).hexdigest()
 
 def proceso_verificador(queue_a, queue_b, queue_c):
+
+    """
+    Construye la cadena de bloques (blockchain):
+    - Recibe resultados de los analizadores desde las Queues.
+    - Genera bloques con hash encadenado.
+    - Detecta condiciones de alerta (valores críticos).
+    - Guarda la blockchain en output/blockchain.json.
+    """
+
     blockchain = []
     prev_hash = "0"
 
-    # Obtén la ruta del directorio donde está ubicado este script
     script_dir = os.path.dirname(os.path.abspath(__file__))
 
-    # Define la ruta para la carpeta "output" dentro del directorio del script
     output_dir = os.path.join(script_dir, "output")
     os.makedirs(output_dir, exist_ok=True)
 
@@ -101,7 +134,6 @@ def proceso_verificador(queue_a, queue_b, queue_c):
 
         print(f"[Bloque #{i+1}] Hash: {bloque['hash']} | ALERTA: {alerta}")
 
-    # Guarda el archivo JSON dentro de la carpeta "output"
     blockchain_path = os.path.join(output_dir, "blockchain.json")
     with open(blockchain_path, "w") as f:
         json.dump(blockchain, f, indent=4)
@@ -109,6 +141,13 @@ def proceso_verificador(queue_a, queue_b, queue_c):
 # ========== Proceso Principal ==========
 
 def proceso_principal(pipes_salida):
+
+    """
+    Envía datos generados a través de los Pipes hacia los analizadores.
+    - Genera 60 paquetes de datos (1 por segundo).
+    - Transmite a cada proceso analizador.
+    """
+
     for _ in range(60):
         dato = generar_dato()
         for pipe in pipes_salida:
