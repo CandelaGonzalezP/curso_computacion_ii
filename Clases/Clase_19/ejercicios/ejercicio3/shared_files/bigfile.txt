@@ -1,0 +1,3 @@
+echo "Línea 1 del archivo grande." > shared_files/bigfile.txt
+echo "Línea 2, el servidor lo enviará en trozos." >> shared_files/bigfile.txt
+# O crea un archivo binario pequeño si quieres probar algo que no sea texto

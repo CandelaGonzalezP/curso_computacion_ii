@@ -1,0 +1,57 @@
+"""
+==================================================
+                    RESUMEN
+==================================================
+
+1. FUNDAMENTOS IPV6
+
+# Familia de Direcciones:
+# La clave para todo el networking IPv6.
+AF_INET6 = socket.AF_INET6
+
+# Direcciones Especiales:
+# - Loopback (Cliente): "::1" (Equivalente a 127.0.0.1)
+# - Todas las Interfaces (Servidor): "::"
+
+# Desempaquetado de Tupla IPv6:
+# El socket IPv6 devuelve 4 valores, se ignoran los últimos dos.
+# Ejemplo: ip, puerto, _, _ = client_address
+
+# Configuracion de Socket (Cliente y Servidor):
+# Uso de AF_INET6 en la creación del socket.
+# sock = socket.socket(AF_INET6, socket.SOCK_STREAM)
+
+
+2. SERVIDOR CONCURRENTE Y DUAL STACK
+
+# Concurrencia (Múltiples Clientes):
+# Se logra heredando de ThreadingTCPServer.
+# La lógica de cada conexión va en la clase Manejador (BaseRequestHandler).
+# CLASE_SERVIDOR(socketserver.ThreadingTCPServer):
+#     address_family = AF_INET6  # O AF_INET, según el modo.
+
+# Sincronización de Estadísticas:
+# Uso de Lock para proteger variables globales (ej: conteo de conexiones, datos transferidos)
+# al ser modificadas por múltiples hilos al mismo tiempo.
+# LOCK = threading.Lock()
+# with LOCK:
+#     # Actualizar variable de forma segura.
+
+# Servidor Dual Stack (IPv4 e IPv6 a la vez):
+# Se logra configurando el socket IPv6 para que NO sea exclusivo de IPv6.
+# socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+# Esto permite que el socket AF_INET6 escuche también tráfico IPv4.
+
+
+3. PROTOCOLO Y SEGURIDAD
+
+# Transferencia de Archivos Grandes (Chunks/Trozo):
+# Para evitar la saturación de memoria, los archivos se leen y envían en bucles.
+# Tamaño de Chunk: CHUNK_SIZE = 1024 (o similar).
+# Bucle de Envío: leer(CHUNK_SIZE) y enviar el fragmento hasta llegar al tamaño total.
+
+# Evaluación Segura (Calculadora):
+# NUNCA usar eval() directamente con entrada de usuario.
+# 1. Validar la entrada: Asegurar que la expresión SÓLO contenga caracteres seguros (dígitos, +, -, *, /, (, ), espacio).
+# 2. Manejo de Errores: Usar try/except para capturar ZeroDivisionError, SyntaxError, etc., y devolver un "ERROR:" descriptivo al cliente.
+"""
