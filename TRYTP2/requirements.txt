@@ -1,0 +1,27 @@
+# requirements.txt
+# Dependencias del proyecto TP2 - Sistema de Scraping Distribuido
+
+# Web scraping
+aiohttp==3.9.1
+beautifulsoup4==4.12.2
+lxml==4.9.3
+html5lib==1.1
+
+# Procesamiento de imágenes
+Pillow==10.1.0
+
+# Screenshots (opcional pero recomendado)
+selenium==4.15.2
+
+# Alternativa a Selenium (descomentar si se prefiere)
+# playwright==1.40.0
+
+# HTTP requests síncrono (para image processor)
+requests==2.31.0
+
+# Testing (opcional)
+pytest==7.4.3
+pytest-asyncio==0.21.1
+
+# Utilidades
+python-dateutil==2.8.2

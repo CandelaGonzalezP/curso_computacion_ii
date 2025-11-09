@@ -1,0 +1,492 @@
+================================================================================
+                    TP2 - SISTEMA DE SCRAPING WEB DISTRIBUIDO
+                            MODO DE USO COMPLETO
+================================================================================
+
+📋 ÍNDICE
+---------
+1. Instalación Rápida
+2. Iniciar los Servidores
+3. Usar el Cliente
+4. Ejemplos Prácticos
+5. Opciones Avanzadas
+6. Solución de Problemas
+7. Comandos Útiles
+
+
+================================================================================
+1. INSTALACIÓN RÁPIDA
+================================================================================
+
+Paso 1: Crear entorno virtual
+------------------------------
+# Linux/Mac
+python3 -m venv venv
+source venv/bin/activate
+
+# Windows
+python -m venv venv
+venv\Scripts\activate
+
+
+Paso 2: Instalar dependencias
+-----------------------------
+pip install -r requirements.txt
+
+
+Paso 3: Instalar ChromeDriver (OPCIONAL - para screenshots)
+-----------------------------------------------------------
+# Ubuntu/Debian
+sudo apt-get update
+sudo apt-get install chromium-chromedriver
+
+# macOS
+brew install chromedriver
+
+# Windows
+Descargar de: https://chromedriver.chromium.org/
+
+# Alternativa más fácil - Playwright
+pip install playwright
+playwright install chromium
+
+
+================================================================================
+2. INICIAR LOS SERVIDORES
+================================================================================
+
+IMPORTANTE: Debes iniciar PRIMERO el servidor de procesamiento (Parte B)
+         y LUEGO el servidor de scraping (Parte A)
+
+
+Terminal 1: Servidor de Procesamiento (Parte B)
+-----------------------------------------------
+python3 server_processing.py -i 127.0.0.1 -p 9000
+
+Verás:
+  Starting Processing Server on 127.0.0.1:9000
+  Process pool size: 8
+  Server ready to accept connections
+
+
+Terminal 2: Servidor de Scraping (Parte A)
+------------------------------------------
+python3 server_scraping.py -i 127.0.0.1 -p 8000
+
+Verás:
+  Starting Scraping Server on 127.0.0.1:8000
+  Workers: 4
+  Processing Server: 127.0.0.1:9000
+
+
+¡Listo! El sistema está corriendo 🚀
+
+
+================================================================================
+3. USAR EL CLIENTE
+================================================================================
+
+Terminal 3: Cliente de Prueba
+-----------------------------
+
+Scraping básico:
+----------------
+python3 client.py --url https://example.com
+
+
+Ver solo salud del servidor:
+---------------------------
+python3 client.py --health
+
+
+Usar método POST:
+-----------------
+python3 client.py --url https://python.org --post
+
+
+Obtener resultado en JSON:
+--------------------------
+python3 client.py --url https://github.com --json
+
+
+Servidor remoto:
+---------------
+python3 client.py --url https://example.com --host 192.168.1.10 --port 8000
+
+
+================================================================================
+4. EJEMPLOS PRÁCTICOS
+================================================================================
+
+Ejemplo 1: Scrapear una página simple
+-------------------------------------
+python3 client.py --url https://example.com
+
+Resultado:
+  📊 RESULTS
+  ✅ Status: success
+  📌 Title: Example Domain
+  🔗 Links Found: 1
+  🖼️  Images Count: 0
+
+
+Ejemplo 2: Scrapear sitio complejo
+----------------------------------
+python3 client.py --url https://python.org
+
+Resultado mostrará:
+  - Título de la página
+  - Todos los enlaces encontrados
+  - Meta tags (description, keywords, Open Graph)
+  - Estructura HTML (H1, H2, H3, etc.)
+  - Screenshots (si Selenium está instalado)
+  - Métricas de rendimiento
+  - Thumbnails de imágenes
+
+
+Ejemplo 3: Usando curl (método GET)
+-----------------------------------
+curl "http://localhost:8000/scrape?url=https://example.com" | jq
+
+
+Ejemplo 4: Usando curl (método POST)
+------------------------------------
+curl -X POST http://localhost:8000/scrape \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://python.org"}' | jq
+
+
+Ejemplo 5: Scrapear múltiples URLs en lote
+------------------------------------------
+python3 examples/batch_scraper.py \
+  --urls https://python.org https://github.com https://stackoverflow.com \
+  --concurrent 3 \
+  --output results.json
+
+
+Ejemplo 6: Monitorear estado del servidor
+-----------------------------------------
+python3 examples/monitor.py --interval 5
+
+
+================================================================================
+5. OPCIONES AVANZADAS
+================================================================================
+
+Servidor de Scraping (server_scraping.py)
+-----------------------------------------
+Uso: python3 server_scraping.py -i IP -p PORT [opciones]
+
+Opciones:
+  -i, --ip IP                  Dirección de escucha (IPv4 o IPv6)
+  -p, --port PORT              Puerto de escucha
+  -w, --workers N              Número de workers async (default: 4)
+  --processing-host HOST       IP del servidor de procesamiento
+  --processing-port PORT       Puerto del servidor de procesamiento
+
+Ejemplos:
+  # IPv4 básico
+  python3 server_scraping.py -i 127.0.0.1 -p 8000
+  
+  # IPv6
+  python3 server_scraping.py -i ::1 -p 8000
+  
+  # Más workers (mayor concurrencia)
+  python3 server_scraping.py -i 0.0.0.0 -p 8000 -w 10
+  
+  # Servidor de procesamiento remoto
+  python3 server_scraping.py -i 0.0.0.0 -p 8000 \
+    --processing-host 192.168.1.100 --processing-port 9000
+
+
+Servidor de Procesamiento (server_processing.py)
+------------------------------------------------
+Uso: python3 server_processing.py -i IP -p PORT [opciones]
+
+Opciones:
+  -i, --ip IP                  Dirección de escucha
+  -p, --port PORT              Puerto de escucha
+  -n, --processes N            Número de procesos (default: CPU cores)
+
+Ejemplos:
+  # Básico
+  python3 server_processing.py -i 127.0.0.1 -p 9000
+  
+  # Más procesos (CPU-bound tasks)
+  python3 server_processing.py -i 127.0.0.1 -p 9000 -n 16
+  
+  # Escuchar en todas las interfaces
+  python3 server_processing.py -i 0.0.0.0 -p 9000
+
+
+Cliente (client.py)
+------------------
+Uso: python3 client.py [opciones]
+
+Opciones:
+  --host HOST                  Host del servidor (default: 127.0.0.1)
+  --port PORT                  Puerto del servidor (default: 8000)
+  --url URL                    URL a scrapear
+  --post                       Usar método POST
+  --health                     Health check
+  --json                       Salida en formato JSON
+
+Ejemplos:
+  # Básico
+  python3 client.py --url https://example.com
+  
+  # POST + JSON
+  python3 client.py --url https://python.org --post --json
+  
+  # Health check
+  python3 client.py --health
+
+
+================================================================================
+6. SOLUCIÓN DE PROBLEMAS
+================================================================================
+
+Problema: "Connection refused" al iniciar servidor de scraping
+--------------------------------------------------------------
+Causa: El servidor de procesamiento no está corriendo
+Solución: Iniciar primero el servidor de procesamiento
+
+  Terminal 1: python3 server_processing.py -i 127.0.0.1 -p 9000
+  Terminal 2: python3 server_scraping.py -i 127.0.0.1 -p 8000
+
+
+Problema: "Address already in use"
+----------------------------------
+Causa: El puerto ya está siendo usado
+Solución: 
+  1. Cambiar de puerto:
+     python3 server_scraping.py -i 127.0.0.1 -p 8080
+  
+  2. O matar el proceso que lo usa:
+     # Linux/Mac
+     lsof -ti:8000 | xargs kill -9
+     
+     # Windows
+     netstat -ano | findstr :8000
+     taskkill /PID <PID> /F
+
+
+Problema: Screenshots no funcionan
+----------------------------------
+Causa: ChromeDriver no instalado o Selenium no disponible
+Solución:
+  1. Instalar ChromeDriver (ver sección 1)
+  2. O usar sin screenshots (el resto funciona perfectamente)
+  3. Verificar: python3 -c "from selenium import webdriver; print('OK')"
+
+
+Problema: "Module not found"
+----------------------------
+Causa: Dependencias no instaladas
+Solución:
+  pip install -r requirements.txt
+
+
+Problema: Timeout al scrapear páginas
+-------------------------------------
+Causa: Página muy lenta o inaccesible
+Solución: El sistema tiene timeout de 30s, esto es normal para páginas lentas
+
+
+Problema: Error de encoding
+---------------------------
+Causa: Caracteres especiales en páginas
+Solución: Ya está manejado con errors='ignore' en el código
+
+
+================================================================================
+7. COMANDOS ÚTILES
+================================================================================
+
+Ver logs en tiempo real:
+-----------------------
+# Si usaste los scripts de inicio
+tail -f logs/scraping.log
+tail -f logs/processing.log
+
+
+Detener todos los servidores:
+-----------------------------
+# Linux/Mac
+pkill -f server_scraping.py
+pkill -f server_processing.py
+
+# Windows
+taskkill /F /IM python.exe
+
+
+Ver procesos corriendo:
+----------------------
+# Linux/Mac
+ps aux | grep server_
+
+# Windows
+tasklist | findstr python
+
+
+Verificar puertos en uso:
+------------------------
+# Linux/Mac
+lsof -i :8000
+lsof -i :9000
+
+# Windows
+netstat -ano | findstr :8000
+netstat -ano | findstr :9000
+
+
+Ejecutar tests:
+--------------
+# Todos los tests
+pytest tests/ -v
+
+# Solo tests de scraper
+pytest tests/test_scraper.py -v
+
+# Con coverage
+pytest tests/ --cov=. --cov-report=html
+
+
+Verificar instalación:
+---------------------
+python3 -c "import aiohttp, bs4, lxml; print('✅ Dependencias OK')"
+
+
+Actualizar dependencias:
+-----------------------
+pip install --upgrade -r requirements.txt
+
+
+================================================================================
+FLUJO COMPLETO DE USO
+================================================================================
+
+1. Activar entorno virtual
+   source venv/bin/activate
+
+2. Iniciar servidor de procesamiento
+   python3 server_processing.py -i 127.0.0.1 -p 9000
+
+3. Iniciar servidor de scraping (nueva terminal)
+   python3 server_scraping.py -i 127.0.0.1 -p 8000
+
+4. Probar con cliente (nueva terminal)
+   python3 client.py --url https://example.com
+
+5. Ver resultados en pantalla
+
+6. Para detener: Ctrl+C en cada terminal
+
+
+================================================================================
+FORMATO DE RESPUESTA JSON
+================================================================================
+
+El servidor devuelve JSON con esta estructura:
+
+{
+  "url": "https://example.com",
+  "timestamp": "2024-11-10T15:30:00Z",
+  "status": "success",
+  "scraping_data": {
+    "title": "Example Domain",
+    "links": ["https://...", "..."],
+    "meta_tags": {
+      "description": "...",
+      "keywords": "...",
+      "og_title": "..."
+    },
+    "images_count": 15,
+    "structure": {
+      "h1": 2,
+      "h2": 5,
+      "h3": 10
+    }
+  },
+  "processing_data": {
+    "screenshot": "base64_encoded_image...",
+    "performance": {
+      "load_time_ms": 1250,
+      "total_size_kb": 2048,
+      "num_requests": 45
+    },
+    "thumbnails": ["base64_thumb1", "base64_thumb2"]
+  }
+}
+
+
+================================================================================
+ENDPOINTS DISPONIBLES
+================================================================================
+
+GET /scrape?url=<URL>
+--------------------
+Scrapear una URL específica
+
+Ejemplo:
+  curl "http://localhost:8000/scrape?url=https://example.com"
+
+
+POST /scrape
+-----------
+Scrapear una URL (método POST)
+
+Ejemplo:
+  curl -X POST http://localhost:8000/scrape \
+    -H "Content-Type: application/json" \
+    -d '{"url": "https://example.com"}'
+
+
+GET /health
+----------
+Verificar estado del servidor
+
+Ejemplo:
+  curl http://localhost:8000/health
+
+
+================================================================================
+ARQUITECTURA DEL SISTEMA
+================================================================================
+
+Cliente HTTP
+    ↓
+Servidor A (Asyncio) ←→ Servidor B (Multiprocessing)
+    │                         │
+    ├─ Scraping              ├─ Screenshots
+    ├─ Parsing               ├─ Performance Analysis
+    └─ Metadata              └─ Image Processing
+
+El cliente solo ve el Servidor A (transparencia total)
+
+
+================================================================================
+TIPS Y MEJORES PRÁCTICAS
+================================================================================
+
+1. Siempre iniciar servidor de procesamiento PRIMERO
+
+2. Usar workers según CPU:
+   - 4 workers = uso general
+   - 8+ workers = alta concurrencia
+   - CPU cores = procesamiento intensivo
+
+3. Para desarrollo: usar 127.0.0.1
+   Para producción: usar 0.0.0.0
+
+4. IPv6 es más rápido en redes modernas
+
+5. Screenshots consumen recursos, usar solo cuando necesario
+
+6. Los thumbnails se limitan a 5 por página (configurable)
+
+7. Timeout de 30s por página es suficiente para la mayoría
+
+8. Usar batch_scraper.py para múltiples URLs
+
+================================================================================
