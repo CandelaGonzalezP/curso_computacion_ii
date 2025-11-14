@@ -37,11 +37,9 @@ def test_parse_basic_data():
     data = parse_basic_data(MOCK_HTML, BASE_URL)
     
     assert data['title'] == "Título de Prueba"
-    
     assert data['structure']['h1'] == 1
     assert data['structure']['h2'] == 2
     assert data['structure']['h3'] == 0
-    
     assert data['images_count'] == 2 
     
     assert len(data['links']) == 2

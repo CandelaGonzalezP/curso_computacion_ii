@@ -6,6 +6,7 @@ import asyncio
 import argparse
 import sys
 import socket
+import uuid
 from datetime import datetime
 from typing import Dict, Any, Optional
 
@@ -21,13 +22,30 @@ from scraper.async_http import AsyncHTTPClient
 from scraper.html_parser import parse_basic_data
 from scraper.metadata_extractor import extract_metadata
 
+
+async def on_startup(app: web.Application):
+    """Señal que se ejecuta cuando el servidor arranca."""
+    print("[AsyncServer] Servidor arrancando...")
+    http_client = AsyncHTTPClient(timeout=30)
+    await http_client.create_session()
+    app['http_client'] = http_client
+    app['tasks_db'] = {} 
+    print("[AsyncServer] Cliente HTTP (aiohttp) y DB de tareas listos.")
+
+async def on_cleanup(app: web.Application):
+    """Señal que se ejecuta cuando el servidor se apaga."""
+    print("[AsyncServer] Servidor apagándose...")
+    if 'http_client' in app:
+        await app['http_client'].close_session()
+        print("[AsyncServer] Cliente HTTP (aiohttp) cerrado.")
+
+
 class ScrapingCoordinator:
     """Maneja la lógica de scraping y coordinación."""
     
-    def __init__(self, proc_host: str, proc_port: int, http_client: AsyncHTTPClient):
+    def __init__(self, proc_host: str, proc_port: int):
         self.proc_host = proc_host
         self.proc_port = proc_port
-        self.http_client = http_client
         self.proto = ProtocolHandler()
         print(f"[AsyncServer] Coordinador listo. Procesador en: {proc_host}:{proc_port}")
 
@@ -50,8 +68,9 @@ class ScrapingCoordinator:
             if msg_type == RESP_SUCCESS:
                 return resp_payload.get('data')
             else:
-                print(f"[AsyncServer] Error reportado por Servidor B: {resp_payload.get('error')}")
-                return {"error": resp_payload.get('error')}
+                error_msg = resp_payload.get('error', 'Error desconocido del Servidor B')
+                print(f"[AsyncServer] Error reportado por Servidor B: {error_msg}")
+                return {"error": error_msg}
 
         except (asyncio.TimeoutError, ConnectionRefusedError, ProtocolError) as e:
             print(f"[AsyncServer] Error de comunicación con Servidor B: {e}")
@@ -62,19 +81,17 @@ class ScrapingCoordinator:
                 writer.close()
                 await writer.wait_closed()
 
-    async def handle_scrape(self, request: web.Request) -> web.Response:
-        """Handler principal de aiohttp para /scrape."""
-        url = request.query.get('url')
-        if not url:
-            return web.json_response(
-                {'error': 'URL parameter is required', 'status': 'failed'},
-                status=400
-            )
-            
-        print(f"[AsyncServer] Petición de scraping recibida para: {url}")
+    async def _run_scraping_task(self, app: web.Application, task_id: str, url: str):
+        """
+        Esta es la función de trabajo real que se ejecuta en segundo plano.
+        Contiene toda la lógica de scraping y procesamiento.
+        """
+        tasks_db = app['tasks_db']
+        http_client = app['http_client']
         
         try:
-            html, final_url = await self.http_client.fetch_html(url)
+            tasks_db[task_id]['status'] = 'scraping'
+            html, final_url = await http_client.fetch_html(url)
             
             loop = asyncio.get_running_loop()
             scrape_data = await loop.run_in_executor(
@@ -84,6 +101,7 @@ class ScrapingCoordinator:
                 None, extract_metadata, html
             )
             
+            tasks_db[task_id]['status'] = 'processing'
             img_urls = scrape_data.pop("image_urls_for_processing", [])
             payload_base = {"url": final_url}
             payload_images = {"url": final_url, "image_urls": img_urls}
@@ -114,37 +132,87 @@ class ScrapingCoordinator:
                 "status": "success"
             }
             
-            return web.json_response(final_json, status=200)
+            tasks_db[task_id]['result'] = final_json
+            tasks_db[task_id]['status'] = 'completed'
+            print(f"[AsyncServer] Tarea {task_id} completada.")
 
-        except (ScrapingError, TaskTimeoutError) as e:
-            print(f"[AsyncServer] Error de Scraping para {url}: {e}")
+        except (ScrapingError, TaskTimeoutError, ProtocolError, Exception) as e:
+            print(f"[AsyncServer] Tarea {task_id} falló: {e}")
+            tasks_db[task_id]['status'] = 'failed'
+            tasks_db[task_id]['result'] = {'error': str(e), 'status': 'failed'}
+
+
+    async def handle_scrape(self, request: web.Request) -> web.Response:
+        """
+        Handler para POST /scrape
+        Inicia una nueva tarea de scraping.
+        """
+        data = await request.post()
+        url = data.get('url')
+        if not url:
             return web.json_response(
-                {'error': f'Error al procesar la URL {url}: {e}', 'status': 'failed'},
-                status=502 
+                {'error': 'URL parameter is required in POST data'},
+                status=400
             )
             
-        except ProtocolError as e:
-            print(f"[AsyncServer] Error de comunicación interna: {e}")
-            return web.json_response(
-                {'error': 'Error interno de comunicación entre servidores', 'status': 'failed'},
-                status=503 
-            )
+        task_id = uuid.uuid4().hex
+        app = request.app
+        app['tasks_db'][task_id] = {
+            "status": "pending",
+            "result": None,
+            "url": url
+        }
+        
+        asyncio.create_task(self._run_scraping_task(app, task_id, url))
+        
+        print(f"[AsyncServer] Tarea {task_id} creada para: {url}")
+        
+        return web.json_response(
+            {"status": "pending", "task_id": task_id},
+            status=202
+        )
 
-        except Exception as e:
-            print(f"[AsyncServer] Error interno inesperado: {e}")
+    async def handle_status(self, request: web.Request) -> web.Response:
+        """
+        Handler para GET /status/{task_id}
+        Consulta el estado de una tarea.
+        """
+        task_id = request.match_info.get('task_id')
+        task = request.app['tasks_db'].get(task_id)
+        
+        if not task:
+            return web.json_response({'error': 'Task ID not found'}, status=404)
+        
+        return web.json_response({'task_id': task_id, 'status': task['status']})
+
+    async def handle_result(self, request: web.Request) -> web.Response:
+        """
+        Handler para GET /result/{task_id}
+        Obtiene el resultado de una tarea completada.
+        """
+        task_id = request.match_info.get('task_id')
+        task = request.app['tasks_db'].get(task_id)
+        
+        if not task:
+            return web.json_response({'error': 'Task ID not found'}, status=404)
+            
+        if task['status'] == 'completed':
+            return web.json_response(task['result'])
+        elif task['status'] == 'failed':
+            return web.json_response(task['result'], status=500)
+        else:
             return web.json_response(
-                {'error': f'Error interno del servidor: {e}', 'status': 'failed'},
-                status=500 
+                {'status': task['status'], 'message': 'Task is not yet complete.'},
+                status=202 
             )
 
     async def handle_health(self, request: web.Request) -> web.Response:
-        """Handler para Health Check."""
         return web.json_response({"status": "healthy", "service": "ScrapingServer"})
 
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description='Servidor de Scraping Web Asíncrono (Parte A)',
+        description='Servidor de Scraping Web Asíncrono (Parte A - CON BONUS)',
         formatter_class=argparse.RawDescriptionHelpFormatter
     )
     parser.add_argument('-i', '--ip', type=str, required=True, help='Dirección de escucha (ej: 0.0.0.0 para IPv4, :: para IPv6/Dual)')
@@ -158,29 +226,23 @@ async def init_app(args: argparse.Namespace) -> web.Application:
     """Crea e inicializa la App aiohttp."""
     app = web.Application()
     
-    http_client = AsyncHTTPClient(timeout=30)
-    await http_client.create_session()
-    
     coordinator = ScrapingCoordinator(
         args.processing_host, 
-        args.processing_port, 
-        http_client
+        args.processing_port 
     )
     
-    app.router.add_get('/scrape', coordinator.handle_scrape)
+    app.router.add_post('/scrape', coordinator.handle_scrape) 
+    app.router.add_get('/status/{task_id}', coordinator.handle_status)
+    app.router.add_get('/result/{task_id}', coordinator.handle_result)
     app.router.add_get('/health', coordinator.handle_health)
     
-    async def _cleanup(app_instance):
-        print("[AsyncServer] Cerrando sesión HTTP del cliente...")
-        await http_client.close_session()
-        
-    app.on_cleanup.append(_cleanup)
+    app.on_startup.append(on_startup)
+    app.on_cleanup.append(on_cleanup)
     
     return app
 
 def main():
     args = parse_args()
-
     if args.ip == '::':
         print("[AsyncServer] Escuchando en modo Dual-Stack (IPv4 e IPv6) en [::]")
     elif '.' in args.ip:
