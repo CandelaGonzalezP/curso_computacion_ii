@@ -25,7 +25,7 @@ MOCK_HTML = """
     <a href="#">Ancla</a>
     
     <img src="img/logo.png">
-    <img src="httpsG://cdn.com/img.jpg">
+    <img src="https://cdn.com/img.jpg">
     <img src="data:image/png;base64,iVBORw0...">
 </body>
 </html>

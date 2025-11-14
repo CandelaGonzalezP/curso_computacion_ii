@@ -61,8 +61,13 @@ def _extract_links(soup: BeautifulSoup, base_url: str) -> List[str]:
     return list(links)
 
 def _count_images(soup: BeautifulSoup) -> int:
-    """Cuenta <img> tags y CSS background-images simples."""
-    img_tags_count = len(soup.find_all('img', src=True))
+    """Cuenta <img> tags (ignorando data:) y CSS background-images simples."""
+    
+    img_tags = soup.find_all('img', src=True)
+    img_tags_count = 0
+    for tag in img_tags:
+        if not tag.get('src', '').strip().startswith('data:image'):
+            img_tags_count += 1
     
     css_images_count = 0
     style_tags = soup.find_all('style')

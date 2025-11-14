@@ -1,0 +1,386 @@
+===============================================================================
+                    TP2 - SISTEMA DE SCRAPING WEB DISTRIBUIDO
+                            GUÍA DE USO RÁPIDA
+===============================================================================
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 1. INSTALACIÓN                                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+1.1. Requisitos Previos
+   ✓ Python 3.8 o superior
+   ✓ Google Chrome o Chromium instalado
+   ✓ pip actualizado
+
+1.2. Instalar Dependencias
+   
+   cd TP_2/
+   pip install -r requirements.txt
+
+   Nota: La primera ejecución descargará ChromeDriver automáticamente.
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 2. INICIO RÁPIDO - CONFIGURACIÓN LOCALHOST                             │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Necesitas 3 terminales abiertas simultáneamente:
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║ TERMINAL 1: Servidor de Procesamiento (Servidor B)                   ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+   python server_processing.py -i 127.0.0.1 -p 9000
+
+   Salida esperada:
+   ============================================================
+   Servidor de Procesamiento (Parte B)
+   Iniciando en: ('127.0.0.1', 9000) (Familia: AddressFamily.AF_INET)
+   Tamaño del Pool de Procesos: 8
+   ============================================================
+
+   ⚠️  IMPORTANTE: Dejar esta terminal corriendo.
+
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║ TERMINAL 2: Servidor de Scraping (Servidor A)                        ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+   python server_scraping.py -i 127.0.0.1 -p 8000 \
+       --processing-host 127.0.0.1 --processing-port 9000
+
+   Salida esperada:
+   [AsyncServer] Escuchando en modo IPv4 en 127.0.0.1
+   [AsyncServer] Puerto: 8000, Workers: 1
+   ============================================================
+   [AsyncServer] Coordinador listo. Procesador en: 127.0.0.1:9000
+   [AsyncHTTPClient] Sesión aiohttp creada.
+   [AsyncServer] Servidor AsyncIO iniciado en 127.0.0.1:8000
+
+   ⚠️  IMPORTANTE: Dejar esta terminal corriendo.
+
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║ TERMINAL 3: Cliente                                                   ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+   Ejemplo básico (muestra resultado en consola):
+   
+   python client.py -u https://www.python.org
+
+   
+   Ejemplo guardando resultados en disco:
+   
+   python client.py -u https://www.github.com --save
+
+   
+   Salida esperada:
+   Contactando al servidor en: http://localhost:8000/scrape
+   Solicitando scraping de: https://www.python.org
+
+   Respuesta recibida (Status 200 OK). Procesando...
+   Resultados JSON completos guardados en: outputs/python_org_20251113_103045.json
+   Screenshot guardado en: screenshots/python_org_20251113_103045.png
+
+   ¡Solicitud completada!
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 3. CASOS DE USO COMUNES                                                │
+└─────────────────────────────────────────────────────────────────────────┘
+
+3.1. Scrapear y Guardar Resultados (Recomendado)
+   
+   python client.py -u https://www.example.com --save
+   
+   📂 Genera:
+   - outputs/<dominio>_<timestamp>.json
+   - screenshots/<dominio>_<timestamp>.png
+
+
+3.2. Scrapear Sin Guardar (Solo ver en consola)
+   
+   python client.py -u https://www.example.com
+
+
+3.3. Scrapear con Servidor Remoto
+   
+   python client.py -u https://www.example.com \
+       --server_host 192.168.1.100 \
+       --server_port 8080 \
+       --save
+
+
+3.4. Verificar Salud del Servidor
+   
+   curl http://localhost:8000/health
+   
+   Respuesta esperada:
+   {"status": "healthy", "service": "ScrapingServer"}
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 4. CONFIGURACIONES AVANZADAS                                           │
+└─────────────────────────────────────────────────────────────────────────┘
+
+4.1. Servidor de Procesamiento con Más Procesos
+   
+   python server_processing.py -i 127.0.0.1 -p 9000 -n 16
+   
+   Recomendado: 1.5x el número de núcleos CPU
+
+
+4.2. Servidor en Todas las Interfaces (IPv4)
+   
+   # Servidor B
+   python server_processing.py -i 0.0.0.0 -p 9000
+   
+   # Servidor A
+   python server_scraping.py -i 0.0.0.0 -p 8000 \
+       --processing-host 127.0.0.1 --processing-port 9000
+
+
+4.3. Modo Dual-Stack (IPv4 e IPv6 simultáneamente)
+   
+   # Servidor B
+   python server_processing.py -i :: -p 9000
+   
+   # Servidor A
+   python server_scraping.py -i :: -p 8000 \
+       --processing-host ::1 --processing-port 9000
+   
+   # Cliente IPv6
+   python client.py -u https://www.example.com \
+       --server_host ::1 --server_port 8000
+
+
+4.4. Solo IPv6
+   
+   # Servidor B
+   python server_processing.py -i ::1 -p 9000
+   
+   # Servidor A
+   python server_scraping.py -i ::1 -p 8000 \
+       --processing-host ::1 --processing-port 9000
+   
+   # Cliente
+   python client.py -u https://www.example.com \
+       --server_host ::1 --server_port 8000
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 5. DESPLIEGUE EN RED LOCAL (MÚLTIPLES MÁQUINAS)                        │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Escenario: Separar procesamiento pesado del scraping
+
+┌────────────────────────────────────────────────────────────────────┐
+│ Máquina 1 (Potente): Servidor de Procesamiento                    │
+│ IP: 192.168.1.100                                                  │
+└────────────────────────────────────────────────────────────────────┘
+
+   python server_processing.py -i 0.0.0.0 -p 9000 -n 16
+   
+   ⚠️  Asegurar que el firewall permita conexiones en el puerto 9000
+
+
+┌────────────────────────────────────────────────────────────────────┐
+│ Máquina 2 (Liviana): Servidor de Scraping                         │
+│ IP: 192.168.1.101                                                  │
+└────────────────────────────────────────────────────────────────────┘
+
+   python server_scraping.py -i 0.0.0.0 -p 8000 \
+       --processing-host 192.168.1.100 --processing-port 9000
+   
+   ⚠️  Asegurar que el firewall permita conexiones en el puerto 8000
+
+
+┌────────────────────────────────────────────────────────────────────┐
+│ Máquina 3 (Cliente): Cualquier computadora en la red              │
+└────────────────────────────────────────────────────────────────────┘
+
+   python client.py -u https://www.python.org \
+       --server_host 192.168.1.101 --server_port 8000 --save
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 6. TESTING                                                              │
+└─────────────────────────────────────────────────────────────────────────┘
+
+6.1. Ejecutar Todos los Tests
+   
+   pytest tests/ -v
+
+
+6.2. Solo Tests Unitarios (Rápidos)
+   
+   pytest tests/test_protocol.py tests/test_scraper.py -v
+
+
+6.3. Tests de Integración E2E (Lentos, requieren Chrome)
+   
+   pytest tests/test_integration.py -v
+   
+   Nota: Estos tests inician los servidores automáticamente y 
+         prueban IPv4 e IPv6.
+
+
+6.4. Excluir Tests Lentos
+   
+   pytest tests/ -m "not slow"
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 7. ESTRUCTURA DE LA RESPUESTA                                          │
+└─────────────────────────────────────────────────────────────────────────┘
+
+El servidor devuelve un JSON con esta estructura:
+
+{
+  "url": "https://www.python.org",
+  "timestamp": "2025-11-13T10:30:45.123456",
+  "status": "success",
+  
+  "scraping_data": {
+    "title": "Welcome to Python.org",
+    "links": ["https://...", ...],
+    "meta_tags": {
+      "description": "...",
+      "keywords": "...",
+      "og:title": "..."
+    },
+    "structure": {
+      "h1": 2, "h2": 5, "h3": 10, "h4": 0, "h5": 0, "h6": 0
+    },
+    "images_count": 15
+  },
+  
+  "processing_data": {
+    "screenshot": "iVBORw0KGgoAAAANSUhEUgAA...",  // Base64
+    "performance": {
+      "load_time_ms": 1234.56,
+      "total_size_kb": 567.89,
+      "num_requests": 42
+    },
+    "thumbnails": [
+      "iVBORw0KGgoAAAANSUhEUgAA...",  // Base64
+      "iVBORw0KGgoAAAANSUhEUgAA..."
+    ]
+  }
+}
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 8. SOLUCIÓN DE PROBLEMAS                                               │
+└─────────────────────────────────────────────────────────────────────────┘
+
+8.1. Error: "Address already in use"
+   
+   Solución 1: Esperar 30 segundos y reintentar
+   Solución 2: Cambiar el puerto
+   
+   python server_scraping.py -i 127.0.0.1 -p 8001 ...
+
+
+8.2. Error: "No se pudo conectar al servidor"
+   
+   ✓ Verificar que el Servidor A esté corriendo
+   ✓ Verificar que el puerto coincida con el del servidor
+   ✓ Verificar firewall si es servidor remoto
+
+
+8.3. Error: "Error de comunicación con Servidor B"
+   
+   ✓ Verificar que el Servidor B esté corriendo
+   ✓ Verificar que las IPs/puertos coincidan en ambos servidores
+   ✓ Verificar firewall
+
+
+8.4. ChromeDriver no se descarga
+   
+   pip install --upgrade webdriver-manager
+   
+   O instalar Chrome/Chromium manualmente:
+   - Ubuntu/Debian: sudo apt install chromium-browser
+   - Windows: Descargar desde google.com/chrome
+   - Mac: brew install --cask google-chrome
+
+
+8.5. Error: "Timeout esperando la respuesta"
+   
+   ✓ La página puede ser muy pesada (>15000px)
+   ✓ Conexión lenta
+   ✓ Aumentar timeout en el código si es necesario
+
+
+8.6. Puerto Bloqueado/Firewall
+   
+   Linux:
+   sudo ufw allow 8000
+   sudo ufw allow 9000
+   
+   Windows:
+   - Panel de Control → Firewall → Reglas de entrada
+   - Agregar regla para puertos 8000 y 9000
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 9. COMANDOS DE REFERENCIA RÁPIDA                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+# Inicio básico (3 terminales)
+python server_processing.py -i 127.0.0.1 -p 9000
+python server_scraping.py -i 127.0.0.1 -p 8000 --processing-host 127.0.0.1 --processing-port 9000
+python client.py -u https://www.python.org --save
+
+# Verificar puertos en uso (Linux/Mac)
+lsof -i :8000
+lsof -i :9000
+
+# Verificar puertos en uso (Windows)
+netstat -ano | findstr :8000
+netstat -ano | findstr :9000
+
+# Matar proceso por puerto (Linux/Mac)
+lsof -ti:8000 | xargs kill -9
+
+# Tests
+pytest tests/ -v
+pytest tests/test_integration.py -v
+
+# Health Check
+curl http://localhost:8000/health
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 10. LIMITACIONES Y NOTAS IMPORTANTES                                   │
+└─────────────────────────────────────────────────────────────────────────┘
+
+⚠️  Screenshots limitados a 15000px de altura
+⚠️  Máximo 5 thumbnails por solicitud
+⚠️  Requiere Chrome/Chromium instalado
+⚠️  Primera ejecución descarga ChromeDriver (~100MB)
+⚠️  Timeouts: 30s para HTTP, 30s para Selenium
+⚠️  Solo HTTP/HTTPS (no FTP, file://, etc.)
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 11. EJEMPLOS DE URLS PARA PROBAR                                       │
+└─────────────────────────────────────────────────────────────────────────┘
+
+✓ https://www.python.org           (Rápida, bien estructurada)
+✓ https://www.github.com            (Moderna, muchas imágenes)
+✓ https://example.com               (Mínima, ideal para tests)
+✓ https://www.wikipedia.org         (Grande, muchos links)
+✓ https://news.ycombinator.com      (Simple, texto)
+
+✗ https://dominio-invalido.xyz      (Para probar manejo de errores)
+
+
+┌─────────────────────────────────────────────────────────────────────────┐
+│ 12. ATAJOS DE TECLADO IMPORTANTES                                      │
+└─────────────────────────────────────────────────────────────────────────┘
+
+Ctrl+C        →  Detener servidor (graceful shutdown)
+Ctrl+Z        →  Suspender proceso (no recomendado)
+Ctrl+\        →  Forzar cierre (último recurso)
