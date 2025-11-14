@@ -1,39 +1,69 @@
-# scraper/async_http.py
+"""
+Módulo Cliente HTTP Asíncrono (SRP: Solo maneja requests HTTP).
+"""
 
 import aiohttp
 import asyncio
+from typing import Optional, Tuple
 
-# Requisito: Time-out de scraping (máximo 30 segundos)
-SCRAPING_TIMEOUT = 30.0
+from common import ScrapingError, TaskTimeoutError
 
-async def fetch_url(session: aiohttp.ClientSession, url: str) -> str:
-    """Realiza una petición GET asíncrona a la URL y devuelve el HTML."""
-    try:
-        # Uso de ClientTimeout para manejar el timeout de 30 segundos
-        timeout = aiohttp.ClientTimeout(total=SCRAPING_TIMEOUT)
-        # allow_redirects=True es una buena práctica
-        async with session.get(url, timeout=timeout, allow_redirects=True) as response:
-            
-            # Requisito: Manejo de errores de red (códigos de estado HTTP)
-            response.raise_for_status() 
-            
-            # Requisito: Límites de memoria para páginas muy grandes (ej. 10MB)
-            content_length = response.headers.get('Content-Length')
-            if content_length and int(content_length) > 10 * 1024 * 1024:
-                 raise ValueError("Página demasiado grande (más de 10MB)")
-                 
-            # Devolver el contenido como texto (esperamos que sea HTML)
-            return await response.text() 
+class AsyncHTTPClient:
+    """Wrapper para aiohttp.ClientSession con manejo de errores."""
+    
+    def __init__(self, timeout: int = 30):
+        self.timeout = aiohttp.ClientTimeout(total=timeout)
+        self.session: Optional[aiohttp.ClientSession] = None
 
-    # Requisito: Manejo de Timeouts en scraping
-    except asyncio.TimeoutError:
-        raise ConnectionError(f"Error: Timeout después de {SCRAPING_TIMEOUT}s.")
-    # Requisito: Manejo de errores de red (conexiones rechazadas, DNS fallido, etc.)
-    except aiohttp.client_exceptions.ClientConnectorError as e:
-        raise ConnectionError(f"Error de conexión (Conexión rechazada, DNS, etc.) al acceder a {url}: {e}")
-    except aiohttp.client_exceptions.ClientResponseError as e:
-        raise ConnectionError(f"Error de respuesta (HTTP {e.status}) al acceder a {url}.")
-    except ValueError as e:
-        raise ConnectionError(f"Error de contenido: {e}")
-    except Exception as e:
-        raise ConnectionError(f"Error desconocido al obtener {url}: {e.__class__.__name__}")
+    async def create_session(self):
+        """Crea la aiohttp.ClientSession."""
+        if self.session is None or self.session.closed:
+            self.session = aiohttp.ClientSession(timeout=self.timeout)
+            print("[AsyncHTTPClient] Sesión aiohttp creada.")
+
+    async def close_session(self):
+        """Cierra la aiohttp.ClientSession."""
+        if self.session and not self.session.closed:
+            await self.session.close()
+            print("[AsyncHTTPClient] Sesión aiohttp cerrada.")
+
+    async def fetch_html(self, url: str) -> Tuple[str, str]:
+        """
+        Obtiene el contenido HTML de una URL de forma asíncrona.
+        
+        Devuelve:
+            Tuple[str, str]: (contenido_html, url_final)
+        """
+        if not self.session:
+            await self.create_session()
+        
+        try:
+            async with self.session.get(url, allow_redirects=True) as response:
+                response.raise_for_status()
+                
+                content_length = response.headers.get('Content-Length')
+                if content_length and int(content_length) > 10 * 1024 * 1024: 
+                    raise ValueError(f"Página demasiado grande: {content_length} bytes")
+
+                html = await response.text(encoding='utf-8')
+                return html, str(response.url)
+        
+        except aiohttp.ClientConnectorError as e:
+            print(f"Error de conexión al scrapear {url}: {e}")
+            raise ScrapingError(f"No se pudo conectar a {url} (DNS o error de conexión)") from e
+        
+        except aiohttp.ClientResponseError as e:
+            print(f"Error HTTP {e.status} al scrapear {url}: {e.message}")
+            raise ScrapingError(f"Error HTTP {e.status} en {url}") from e
+        
+        except asyncio.TimeoutError as e:
+            print(f"Timeout (30s) al scrapear {url}")
+            raise TaskTimeoutError(f"Timeout al scrapear {url}") from e
+        
+        except ValueError as e: 
+            print(f"Error de valor para {url}: {e}")
+            raise ScrapingError(f"Error al procesar {url}: {e}") from e
+        
+        except Exception as e:
+            print(f"Error inesperado de aiohttp con {url}: {e}")
+            raise ScrapingError(f"Error inesperado al scrapear {url}: {e}") from e

@@ -1,27 +1,32 @@
-# scraper/metadata_extractor.py
+"""
+Función de extracción de Metadatos (SRP: Solo extrae <meta> tags).
+Extrae: Description, Keywords, y OpenGraph.
+"""
 
 from bs4 import BeautifulSoup
+from typing import Dict, Any
+import re
 
-# Requisito 2: Extracción de metadatos
-def extract_meta_tags(html_content: str) -> dict:
-    """Extrae meta tags relevantes (description, keywords, Open Graph, Twitter)."""
-    soup = BeautifulSoup(html_content, 'lxml')
-    meta_tags = {}
-    
-    for tag in soup.find_all('meta'):
-        name = tag.get('name')
-        property_attr = tag.get('property')
+def extract_metadata(html: str) -> Dict[str, Any]:
+    """
+    Extrae meta tags relevantes (description, keywords, Open Graph).
+    """
+    soup = BeautifulSoup(html, 'lxml')
+    metadata: Dict[str, Any] = {}
+
+    desc_tag = soup.find('meta', attrs={'name': re.compile(r'^description$', re.I)})
+    if desc_tag and desc_tag.get('content'):
+        metadata['description'] = desc_tag['content'].strip()
+
+    keys_tag = soup.find('meta', attrs={'name': re.compile(r'^keywords$', re.I)})
+    if keys_tag and keys_tag.get('content'):
+        metadata['keywords'] = keys_tag['content'].strip()
+
+    og_tags = soup.find_all('meta', property=re.compile(r'^og:', re.I))
+    for tag in og_tags:
+        prop = tag.get('property')
         content = tag.get('content')
-        
-        if not content:
-            continue
-            
-        # Tags estándar
-        if name in ['description', 'keywords']:
-            meta_tags[name] = content.strip()
-            
-        # Open Graph y Twitter Card tags
-        if property_attr and (property_attr.startswith('og:') or property_attr.startswith('twitter:')):
-            meta_tags[property_attr] = content.strip()
-            
-    return meta_tags
+        if prop and content:
+            metadata[prop] = content.strip()
+
+    return metadata

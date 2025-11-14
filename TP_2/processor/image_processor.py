@@ -1,26 +1,53 @@
-# processor/image_processor.py
+"""
+Módulo de Procesamiento de Imágenes (SRP: Solo maneja imágenes).
+Descarga y crea thumbnails.
+"""
 
+import requests
 import base64
-import time
-from PIL import Image
 import io
-import random
+from PIL import Image, ImageFile
+from typing import List
 
-def generate_thumbnails(url: str) -> list:
-    """Simula la descarga de imágenes y generación de thumbnails en base64."""
-    print(f"[Processor] Generando thumbnails para: {url}")
-    # Simula trabajo CPU
-    time.sleep(random.uniform(0.8, 1.5)) 
-    
+ImageFile.LOAD_TRUNCATED_IMAGES = True
+
+def process_images(image_urls: List[str]) -> List[str]:
+    """
+    Descarga imágenes (máximo 5) y genera thumbnails.
+    """
     thumbnails = []
-    for i in range(2):
-        # Simula la creación de thumbnails optimizados (2 por requisito)
-        img = Image.new('RGB', (100, 100), 
-                        color = (random.randint(0, 255), 0, random.randint(0, 255))) 
-        img_buffer = io.BytesIO()
-        # Uso de JPEG y calidad para simular optimización
-        img.save(img_buffer, format="JPEG", quality=60) 
-        base64_thumb = base64.b64encode(img_buffer.getvalue()).decode('utf-8')
-        thumbnails.append(base64_thumb)
-        
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.212 Safari/537.36',
+        'Accept': 'image/*'
+    }
+    
+    for url in image_urls[:5]: 
+        try:
+            response = requests.get(url, headers=headers, timeout=10) 
+            response.raise_for_status()
+            
+            img_data = response.content
+            if not img_data:
+                continue
+
+            img = Image.open(io.BytesIO(img_data))
+            
+            if img.mode not in ('RGB', 'L'): 
+                img = img.convert('RGB')
+                
+            img.thumbnail((150, 150)) 
+            
+            out_buf = io.BytesIO()
+            img.save(out_buf, format='JPEG', quality=85) 
+            
+            b64_str = base64.b64encode(out_buf.getvalue()).decode('utf-8')
+            thumbnails.append(b64_str)
+            
+        except requests.RequestException:
+            pass 
+        except (IOError, Image.DecompressionBombError) as e:
+            pass 
+        except Exception as e:
+            pass
+            
     return thumbnails

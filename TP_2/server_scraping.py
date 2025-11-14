@@ -1,190 +1,210 @@
-# server_scraping.py
+"""
+Parte A: Servidor de Scraping Web Asíncrono (aiohttp).
+"""
 
-import aiohttp.web
 import asyncio
 import argparse
 import sys
 import socket
-import datetime
-from urllib.parse import urlparse
+from datetime import datetime
+from typing import Dict, Any, Optional
 
-# Importaciones de módulos internos
-from common.serialization import serialize_message, deserialize_message, HEADER_SIZE
-from common.protocol import create_scraping_request, create_scraping_response
-from scraper.async_http import fetch_url, SCRAPING_TIMEOUT
-from scraper.html_parser import extract_links_and_structure
-from scraper.metadata_extractor import extract_meta_tags
+from aiohttp import web
 
-# --- CONFIGURACIÓN DEFAULTS ---
-# Estas variables son solo defaults si no se pasan argumentos.
-DEFAULT_PROCESSING_SERVER_IP = '127.0.0.1' 
-DEFAULT_PROCESSING_SERVER_PORT = 9000       
+from common.protocol import (
+    ProtocolHandler, TASK_SCREENSHOT, TASK_PERFORMANCE, TASK_IMAGES,
+    RESP_SUCCESS, RESP_ERROR
+)
+from common import ScrapingError, TaskTimeoutError, ProtocolError
 
-# --- FUNCIONES CENTRALES DE SCRAPING Y COORDINACIÓN ---
+from scraper.async_http import AsyncHTTPClient 
+from scraper.html_parser import parse_basic_data
+from scraper.metadata_extractor import extract_metadata
 
-async def perform_scraping(url: str, session: aiohttp.ClientSession) -> dict:
-    """Función principal de scraping I/O (Requisito 1 y 2)."""
-    try:
-        html_content = await fetch_url(session, url)
-    except ConnectionError as e:
-        raise e 
-
-    data = extract_links_and_structure(html_content)
-    metadata = extract_meta_tags(html_content)
+class ScrapingCoordinator:
+    """Maneja la lógica de scraping y coordinación."""
     
-    return {
-        "title": data["title"],
-        "links": data["links"],
-        "meta_tags": metadata,
-        "structure": data["structure"],
-        "images_count": data["images_count"]
-    }
+    def __init__(self, proc_host: str, proc_port: int, http_client: AsyncHTTPClient):
+        self.proc_host = proc_host
+        self.proc_port = proc_port
+        self.http_client = http_client
+        self.proto = ProtocolHandler()
+        print(f"[AsyncServer] Coordinador listo. Procesador en: {proc_host}:{proc_port}")
 
-# --- FUNCIÓN DE COMUNICACIÓN CORREGIDA ---
-# Ahora recibe IP y Puerto como argumentos, eliminando la necesidad de 'global'.
-async def communicate_with_processor(url: str, proc_ip: str, proc_port: int) -> dict:
-    """Comunica asíncronamente con el Servidor B (multiprocessing)."""
-    try:
-        reader, writer = await asyncio.open_connection(
-            proc_ip, proc_port # <--- Usa los argumentos pasados
-        )
-
-        request_msg = create_scraping_request(url)
-        request_bytes = serialize_message(request_msg)
-        
-        writer.write(request_bytes)
-        await writer.drain() 
-
-        # 2. Recibir respuesta (Manejo de errores de comunicación)
-        header = await asyncio.wait_for(reader.readexactly(HEADER_SIZE), timeout=10)
-        import struct
-        (data_len,) = struct.unpack('<I', header)
-
-        buffer = await asyncio.wait_for(reader.readexactly(data_len), timeout=SCRAPING_TIMEOUT + 10)
-        
-        response_data = deserialize_message(header + buffer)
-        writer.close()
-        await writer.wait_closed()
-        
-        return response_data
-
-    except asyncio.TimeoutError:
-        return {"status": "error", "message": "Processor communication/processing timeout"}
-    except ConnectionRefusedError:
-        return {"status": "error", "message": "Processor server is down or refused connection"}
-    except Exception as e:
-        return {"status": "error", "message": f"Processor communication error: {e.__class__.__name__}: {e}"}
-
-# --- HANDLER PRINCIPAL AIOHTTP ---
-
-async def scrape_handler(request):
-    """Handler para la ruta GET /scrape."""
-    url = request.query.get('url')
-    
-    if not url:
-        return aiohttp.web.json_response({"status": "error", "message": "Missing 'url' parameter"}, status=400)
-    
-    parsed_url = urlparse(url)
-    if not parsed_url.scheme or not parsed_url.netloc:
-         return aiohttp.web.json_response({"status": "error", "message": "Invalid or incomplete URL"}, status=400)
-
-    # Obtener configuración del Servidor B desde el objeto app
-    proc_ip = request.app['proc_ip']
-    proc_port = request.app['proc_port']
-
-    print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Petición de cliente recibida para: {url}")
-    
-    session = request.app['client_session']
-    scraping_data = {}
-    processing_data = {}
-    status = "success"
-    
-    try:
-        # 1. Realizar Scraping I/O (async)
-        scraping_data = await perform_scraping(url, session)
-        
-        # 2. Coordinar con Servidor B para procesamiento (Pasando IP/Puerto)
-        processing_data = await communicate_with_processor(url, proc_ip, proc_port)
-        
-        if processing_data.get('status') == 'error':
-            status = "partial_success_processor_failed"
-            print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Servidor B falló: {processing_data.get('message')}")
+    async def _request_processing(self, task_type: int, payload: Dict[str, Any]) -> Optional[Any]:
+        """Función genérica para enviar una tarea al Servidor B."""
+        writer = None
+        try:
+            reader, writer = await asyncio.wait_for(
+                asyncio.open_connection(self.proc_host, self.proc_port),
+                timeout=10.0
+            )
             
-    except ConnectionError as e:
-        status = "error (scraping failed)"
-        scraping_data = {"error": str(e)}
-        processing_data = {"error": "Processing not attempted"}
-        print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Error de Scraping/Red: {e}")
+            await self.proto.async_send_message(writer, task_type, payload)
+            
+            msg_type, resp_payload = await asyncio.wait_for(
+                self.proto.async_read_message(reader),
+                timeout=35.0
+            )
+            
+            if msg_type == RESP_SUCCESS:
+                return resp_payload.get('data')
+            else:
+                print(f"[AsyncServer] Error reportado por Servidor B: {resp_payload.get('error')}")
+                return {"error": resp_payload.get('error')}
+
+        except (asyncio.TimeoutError, ConnectionRefusedError, ProtocolError) as e:
+            print(f"[AsyncServer] Error de comunicación con Servidor B: {e}")
+            raise ProtocolError(f"Error de comunicación con Servidor B: {e}") from e
         
-    except Exception as e:
-        status = "fatal_error_A"
-        print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Error inesperado en el servidor A: {e.__class__.__name__}: {e}")
+        finally:
+            if writer:
+                writer.close()
+                await writer.wait_closed()
 
-    # 3. Consolidar y devolver respuesta
-    final_response = create_scraping_response(url, scraping_data, processing_data, status)
-    print(f"[{datetime.datetime.now().strftime('%H:%M:%S')}] Respuesta consolidada enviada para {url}")
-    return aiohttp.web.json_response(final_response)
+    async def handle_scrape(self, request: web.Request) -> web.Response:
+        """Handler principal de aiohttp para /scrape."""
+        url = request.query.get('url')
+        if not url:
+            return web.json_response(
+                {'error': 'URL parameter is required', 'status': 'failed'},
+                status=400
+            )
+            
+        print(f"[AsyncServer] Petición de scraping recibida para: {url}")
+        
+        try:
+            html, final_url = await self.http_client.fetch_html(url)
+            
+            loop = asyncio.get_running_loop()
+            scrape_data = await loop.run_in_executor(
+                None, parse_basic_data, html, final_url
+            )
+            meta_data = await loop.run_in_executor(
+                None, extract_metadata, html
+            )
+            
+            img_urls = scrape_data.pop("image_urls_for_processing", [])
+            payload_base = {"url": final_url}
+            payload_images = {"url": final_url, "image_urls": img_urls}
 
-# --- ARRANQUE DEL SERVIDOR Y GESTIÓN DE CONFIGURACIÓN ---
+            task_screenshot = self._request_processing(TASK_SCREENSHOT, payload_base)
+            task_performance = self._request_processing(TASK_PERFORMANCE, payload_base)
+            task_images = self._request_processing(TASK_IMAGES, payload_images)
+            
+            results = await asyncio.gather(
+                task_screenshot, task_performance, task_images
+            )
+            
+            final_json = {
+                "url": final_url,
+                "timestamp": datetime.now().isoformat(),
+                "scraping_data": {
+                    "title": scrape_data.get("title"),
+                    "links": scrape_data.get("links"),
+                    "meta_tags": meta_data,
+                    "structure": scrape_data.get("structure"),
+                    "images_count": scrape_data.get("images_count")
+                },
+                "processing_data": {
+                    "screenshot": results[0],
+                    "performance": results[1],
+                    "thumbnails": results[2] or []
+                },
+                "status": "success"
+            }
+            
+            return web.json_response(final_json, status=200)
 
-# La función init_app ahora recibe los valores de la CLI.
-async def init_app(proc_ip, proc_port): # <-- ¡QUITAMOS 'loop' aquí!
-    # app = aiohttp.web.Application(loop=loop) <-- Eliminamos loop=loop
-    app = aiohttp.web.Application() 
+        except (ScrapingError, TaskTimeoutError) as e:
+            print(f"[AsyncServer] Error de Scraping para {url}: {e}")
+            return web.json_response(
+                {'error': f'Error al procesar la URL {url}: {e}', 'status': 'failed'},
+                status=502 
+            )
+            
+        except ProtocolError as e:
+            print(f"[AsyncServer] Error de comunicación interna: {e}")
+            return web.json_response(
+                {'error': 'Error interno de comunicación entre servidores', 'status': 'failed'},
+                status=503 
+            )
+
+        except Exception as e:
+            print(f"[AsyncServer] Error interno inesperado: {e}")
+            return web.json_response(
+                {'error': f'Error interno del servidor: {e}', 'status': 'failed'},
+                status=500 
+            )
+
+    async def handle_health(self, request: web.Request) -> web.Response:
+        """Handler para Health Check."""
+        return web.json_response({"status": "healthy", "service": "ScrapingServer"})
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Servidor de Scraping Web Asíncrono (Parte A)',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('-i', '--ip', type=str, required=True, help='Dirección de escucha (ej: 0.0.0.0 para IPv4, :: para IPv6/Dual)')
+    parser.add_argument('-p', '--port', type=int, required=True, help='Puerto de escucha')
+    parser.add_argument('-w', '--workers', type=int, default=1, help='Número de workers (default: 1, aiohttp es concurrente por sí mismo)')
+    parser.add_argument('--processing-host', type=str, default='127.0.0.1', help='Host del servidor de procesamiento (default: 127.0.0.1)')
+    parser.add_argument('--processing-port', type=int, default=9000, help='Puerto del servidor de procesamiento (default: 9000)')
+    return parser.parse_args()
+
+async def init_app(args: argparse.Namespace) -> web.Application:
+    """Crea e inicializa la App aiohttp."""
+    app = web.Application()
     
-    # app['client_session'] = aiohttp.ClientSession(loop=loop) <-- Eliminamos loop=loop
-    app['client_session'] = aiohttp.ClientSession()
+    http_client = AsyncHTTPClient(timeout=30)
+    await http_client.create_session()
     
-    # Almacenar la configuración del Servidor B en el objeto app
-    app['proc_ip'] = proc_ip
-    app['proc_port'] = proc_port
-
-    app.router.add_get('/scrape', scrape_handler)
+    coordinator = ScrapingCoordinator(
+        args.processing_host, 
+        args.processing_port, 
+        http_client
+    )
+    
+    app.router.add_get('/scrape', coordinator.handle_scrape)
+    app.router.add_get('/health', coordinator.handle_health)
+    
+    async def _cleanup(app_instance):
+        print("[AsyncServer] Cerrando sesión HTTP del cliente...")
+        await http_client.close_session()
+        
+    app.on_cleanup.append(_cleanup)
+    
     return app
 
-async def cleanup_app(app):
-    await app['client_session'].close()
-
 def main():
-    parser = argparse.ArgumentParser(description="Servidor de Scraping Web Asíncrono")
-    parser.add_argument("-i", "--ip", required=True, help="Dirección de escucha (soporta IPv4/IPv6)")
-    parser.add_argument("-p", "--port", required=True, type=int, help="Puerto de escucha")
-    parser.add_argument("-w", "--workers", type=int, default=4, help="Número de workers (default: 4)")
+    args = parse_args()
+
+    if args.ip == '::':
+        print("[AsyncServer] Escuchando en modo Dual-Stack (IPv4 e IPv6) en [::]")
+    elif '.' in args.ip:
+        print(f"[AsyncServer] Escuchando en modo IPv4 en {args.ip}")
+    elif ':' in args.ip:
+         print(f"[AsyncServer] Escuchando en modo IPv6 en [{args.ip}]")
+         
+    print(f"[AsyncServer] Puerto: {args.port}, Workers: {args.workers}")
+    print("=" * 60)
     
-    # Usar los defaults globales para argparse
-    parser.add_argument("--proc-ip", default=DEFAULT_PROCESSING_SERVER_IP, help="IP del Servidor B")
-    parser.add_argument("--proc-port", type=int, default=DEFAULT_PROCESSING_SERVER_PORT, help="Puerto del Servidor B")
-
-    args = parser.parse_args()
-
-    # Obtenemos los valores de la CLI
-    proc_ip = args.proc_ip
-    proc_port = args.proc_port
-
-    # Detección de familia IP para el mensaje (no funcionalmente crítico para aiohttp.web.run_app)
     try:
-        # Intenta crear un socket IPv6 para verificar su disponibilidad
-        socket.socket(socket.AF_INET6, socket.SOCK_STREAM).close()
-        family_name = 'IPv6'
-    except Exception:
-        family_name = 'IPv4'
-    
-    print(f"Servidor A escuchando en {args.ip}:{args.port} | Familia: {family_name} | Workers: {args.workers}")
-    
-    # --- BLOQUE CRÍTICO CORREGIDO: Usamos aiohttp.web.run_app directamente ---
-    # Eliminamos: loop = asyncio.get_event_loop()
-    # Eliminamos: app = loop.run_until_complete(...)
-    
-    aiohttp.web.run_app(
-        # Pasamos el awaitable init_app() directamente. aiohttp se encarga del loop.
-        init_app(proc_ip, proc_port), 
-        host=args.ip, 
-        port=args.port, 
-        handle_signals=True,
-        access_log=None,
-        reuse_port=True,
-        workers=args.workers,
-    )
+        web.run_app(
+            init_app(args),
+            host=args.ip,
+            port=args.port,
+        )
+    except KeyboardInterrupt:
+        print("\n[AsyncServer] Apagando servidor...")
+    except OSError as e:
+        if "Address already in use" in str(e):
+            print(f"Error: La dirección {args.ip}:{args.port} ya está en uso.")
+        else:
+            print(f"Error de OS: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()

@@ -1,125 +1,147 @@
-# server_processing.py
+"""
+Parte B: Servidor de Procesamiento con Multiprocessing y SocketServer.
+"""
 
 import socketserver
 import multiprocessing
-import concurrent.futures
 import argparse
-import os
 import sys
-import struct
 import socket
+from typing import Tuple, Dict, Any
 
-from common.serialization import serialize_message, deserialize_message, HEADER_SIZE
-from common.protocol import KEY_URL
-from processor.screenshot import generate_screenshot 
-from processor.performance import analyze_performance 
-from processor.image_processor import generate_thumbnails
+from common.protocol import (
+    ProtocolHandler, 
+    TASK_SCREENSHOT, TASK_PERFORMANCE, TASK_IMAGES,
+    RESP_SUCCESS, RESP_ERROR
+)
+from common import ProcessingError, TaskTimeoutError, ProtocolError
 
-HEADER_FORMAT = '<I'
+from processor import screenshot, performance, image_processor
 
-def perform_processing(url: str) -> dict:
-    """Función ejecutada por cada worker en el ProcessPoolExecutor (CPU-bound)."""
-    screenshot_b64 = generate_screenshot(url) 
-    performance_data = analyze_performance(url) 
-    thumbnails_b64 = generate_thumbnails(url)
+mp_pool = None
+
+TASK_MAP = {
+    TASK_SCREENSHOT: screenshot.take_screenshot,
+    TASK_PERFORMANCE: performance.analyze_performance,
+    TASK_IMAGES: image_processor.process_images,
+}
+
+def run_task(msg_type: int, payload: Dict[str, Any]) -> Any:
+    """
+    Función única que el Pool ejecuta.
+    """
+    task_func = TASK_MAP.get(msg_type)
+    if not task_func:
+        raise ValueError(f"Tipo de tarea desconocido: {msg_type}")
+
+    if msg_type == TASK_IMAGES:
+        return task_func(payload.get('image_urls', []))
+    else:
+        url = payload.get('url')
+        if not url:
+            raise ValueError("Payload no contiene 'url'")
+        return task_func(url)
+
+
+class TaskHandler(socketserver.BaseRequestHandler):
+    """
+    Handler para cada conexión de socket. Se ejecuta en un HILO separado.
+    """
     
-    return {
-        "screenshot": screenshot_b64,
-        "performance": performance_data,
-        "thumbnails": thumbnails_b64
-    }
-
-class ProcessingHandler(socketserver.BaseRequestHandler):
-    """Maneja las conexiones TCP del Servidor A usando ThreadingMixIn."""
-    executor: concurrent.futures.ProcessPoolExecutor = None 
-
     def handle(self):
-        self.request.settimeout(5) 
-        request_data = {}
-        processing_result = {}
-        url = "N/A"
+        print(f"[ProcServer] Conexión recibida de {self.client_address}")
+        proto = ProtocolHandler()
         
         try:
-            # 1. Recibir el encabezado (longitud)
-            header = self.request.recv(HEADER_SIZE)
-            if not header or len(header) < HEADER_SIZE:
-                return 
+            msg_type, payload = proto.sync_read_message(self.request)
             
-            (data_len,) = struct.unpack(HEADER_FORMAT, header)
+            print(f"[ProcServer] Tarea {msg_type} recibida para: {payload.get('url')}")
+            
+            result = mp_pool.apply(run_task, args=(msg_type, payload))
+            
+            print(f"[ProcServer] Tarea {msg_type} completada. Enviando respuesta.")
+            proto.sync_send_message(self.request, RESP_SUCCESS, {"data": result})
 
-            # 2. Recibir el cuerpo del mensaje (JSON)
-            buffer = b''
-            bytes_recibidos = 0
-            while bytes_recibidos < data_len:
-                chunk = self.request.recv(min(4096, data_len - bytes_recibidos))
-                if not chunk:
-                    return 
-                buffer += chunk
-                bytes_recibidos += len(chunk)
-            
-            request_data = deserialize_message(header + buffer)
-            url = request_data.get(KEY_URL, "N/A")
-            
-            if not url:
-                print("Error: URL no recibida en la solicitud.")
-                processing_result = {"status": "error", "message": "Missing URL in request"}
-            else:
-                print(f"Petición de procesamiento recibida para: {url} | Delegando a pool.")
-                
-                # 3. Ejecutar la tarea en el pool de procesos
-                future = self.executor.submit(perform_processing, url)
-                processing_result = future.result(timeout=60) 
-            
-        except concurrent.futures.TimeoutError:
-            print(f"Error: Timeout de procesamiento para {url}")
-            processing_result = {"status": "error", "message": "Processing Timeout (CPU bound)"}
-        except socketserver.socket.timeout:
-            print("Error: Timeout de lectura en socket (Servidor B)")
-            processing_result = {"status": "error", "message": "Socket Read Timeout"}
-        except Exception as e:
-            print(f"Error al manejar/deserializar mensaje para {url}: {e}")
-            processing_result = {"status": "error", "message": f"Server B execution error: {e.__class__.__name__}"}
+        except (ProcessingError, TaskTimeoutError, ValueError) as e:
+            print(f"[ProcServer] Error de Tarea: {e}")
+            self._send_error(proto, f"Error de Tarea: {e}")
         
-        # 4. Enviar el resultado de vuelta al Servidor A
-        response_bytes = serialize_message(processing_result)
-        try:
-            self.request.sendall(response_bytes)
-            print(f"Resultado de procesamiento enviado para {url}")
+        except ProtocolError as e:
+            print(f"[ProcServer] Error de Protocolo: {e}")
+        
         except Exception as e:
-            print(f"Error al enviar respuesta al Servidor A para {url}: {e}")
+            print(f"[ProcServer] Error interno inesperado: {e}")
+            self._send_error(proto, f"Error interno del servidor: {e}")
+        
+        print(f"[ProcServer] Conexión cerrada con {self.client_address}")
+
+    def _send_error(self, proto: ProtocolHandler, error_msg: str):
+        """Intenta enviar un mensaje de error al cliente si es posible."""
+        try:
+            proto.sync_send_message(self.request, RESP_ERROR, {"error": error_msg})
+        except Exception as se:
+            print(f"[ProcServer] No se pudo enviar mensaje de error (conexión cerrada?): {se}")
+
+
+class ProcessingTCPServer(socketserver.ThreadingTCPServer):
+    allow_reuse_address = True
+    
+    def __init__(self, server_address: Tuple[str, int], RequestHandlerClass: Any, pool: multiprocessing.Pool):
+        super().__init__(server_address, RequestHandlerClass)
+        self.mp_pool = pool
+
+    def server_close(self):
+        print("[ProcServer] Cerrando pool de procesos...")
+        self.mp_pool.close()
+        self.mp_pool.join()
+        super().server_close()
+
+
+def parse_args():
+    parser = argparse.ArgumentParser(
+        description='Servidor de Procesamiento Distribuido (Parte B)',
+        formatter_class=argparse.RawDescriptionHelpFormatter
+    )
+    parser.add_argument('-i', '--ip', type=str, required=True, help='Dirección de escucha (ej: 0.0.0.0 o ::)')
+    parser.add_argument('-p', '--port', type=int, required=True, help='Puerto de escucha')
+    parser.add_argument('-n', '--processes', type=int, default=None, help=f'Número de procesos en el pool (default: {multiprocessing.cpu_count()})')
+    return parser.parse_args()
+
 
 def main():
-    parser = argparse.ArgumentParser(description="Servidor de Procesamiento Distribuido")
-    parser.add_argument("-i", "--ip", required=True, help="Dirección de escucha")
-    parser.add_argument("-p", "--port", required=True, type=int, help="Puerto de escucha")
-    parser.add_argument("-n", "--processes", type=int, default=os.cpu_count(),
-                        help=f"Número de procesos en el pool (default: {os.cpu_count()})")
+    global mp_pool 
+    args = parse_args()
+    
+    try:
+        addr_info = socket.getaddrinfo(args.ip, args.port, socket.AF_UNSPEC, socket.SOCK_STREAM, 0, socket.AI_PASSIVE)
+        family = addr_info[0][0]
+        server_address = addr_info[0][4]
+    except socket.gaierror as e:
+        print(f"Error resolviendo dirección {args.ip}: {e}")
+        sys.exit(1)
 
-    args = parser.parse_args()
-
-    num_processes = args.processes
-    with concurrent.futures.ProcessPoolExecutor(max_workers=num_processes) as executor:
-        ProcessingHandler.executor = executor
+    ProcessingTCPServer.address_family = family
+    pool_size = args.processes or multiprocessing.cpu_count()
+    
+    try:
+        multiprocessing.set_start_method('spawn', force=True)
+    except RuntimeError:
+        pass 
         
-        class ThreadedTCPServer(socketserver.ThreadingMixIn, socketserver.TCPServer):
-            allow_reuse_address = True 
-            
-            # Soportar IPv4/IPv6 indistintamente
-            address_family = socket.AF_INET
-            try:
-                if socket.has_ipv6:
-                    address_family = socket.AF_INET6
-            except Exception:
-                pass
-                
-        try:
-            server = ThreadedTCPServer((args.ip, args.port), ProcessingHandler)
-            print(f"Servidor de Procesamiento (B) escuchando en {server.server_address} | Procesos: {num_processes}...")
+    mp_pool = multiprocessing.Pool(processes=pool_size)
+    
+    print("=" * 60)
+    print("Servidor de Procesamiento (Parte B)")
+    print(f"Iniciando en: {server_address} (Familia: {family})")
+    print(f"Tamaño del Pool de Procesos: {pool_size}")
+    print("=" * 60)
+    
+    try:
+        with ProcessingTCPServer(server_address, TaskHandler, mp_pool) as server:
             server.serve_forever()
-        except KeyboardInterrupt:
-            print("\nApagando el Servidor de Procesamiento...")
-        except Exception as e:
-            print(f"Error al iniciar el servidor: {e}")
-            
+    except KeyboardInterrupt:
+        print("\n[ProcServer] Apagando servidor...")
+        server.shutdown()
+
 if __name__ == "__main__":
     main()

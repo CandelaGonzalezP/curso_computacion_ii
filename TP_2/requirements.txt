@@ -1,17 +1,18 @@
-# COMPUTACIÓN II - TP2 Requisitos
-
-# Servidor A (Asyncio, Scraping, HTTP Asíncrono)
+# Servidor Async y cliente HTTP
 aiohttp
+
+# Parsing
 beautifulsoup4
 lxml
 
-# Servidor B (Paralelismo, Procesamiento, Imágenes)
+# Procesamiento de imágenes
 Pillow
 
-# Cliente de Prueba
+# Procesamiento (Screenshot y Performance)
+selenium
+webdriver-manager
 requests
 
-# Notas: 
-# - lxml es más rápido para el parsing HTML.
-# - Pillow es usado para la simulación de screenshot y thumbnails.
-# - Si usas Selenium/Playwright para screenshots reales, agrega: selenium o playwright.
+# --- Testing ---
+pytest
+pytest-asyncio
